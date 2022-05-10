@@ -1,5 +1,8 @@
+import 'package:confit/themes/colors.dart';
 import "package:flutter/material.dart";
 import 'package:confit/Screens/login.screen.dart';
+import "package:confit/themes/colors.dart";
+import "package:confit/themes/textStyles.dart";
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -20,9 +23,18 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue,
+        //primarySwatch: AppColors.text,
+        inputDecorationTheme: InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppBorders.radius),
+              borderSide: const BorderSide(color: AppColors.text)),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppBorders.radius),
+              borderSide: const BorderSide(color: AppColors.text)),
+        ),
+        unselectedWidgetColor: AppColors.text,
       ),
-      home: LoginScreen(),
+      home: const LoginScreen(),
     );
   }
 }

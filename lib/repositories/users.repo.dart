@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:confit/models/user.dart";
 
 class LoginData {
   String username;
@@ -16,6 +17,16 @@ class AllUserLoginData {
   }
 
   final List<LoginData> _users = [];
+
+  bool checkUsername(String username) {
+    bool result = false;
+    _users.forEach((element) {
+      if (element.username == username) {
+        result = true;
+      }
+    });
+    return result;
+  }
 
   bool checkLoginData(String username, String password) {
     bool result = false;

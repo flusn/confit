@@ -1,1 +1,15 @@
 import 'package:flutter/cupertino.dart';
+
+class AppPaddings {
+  static const double paddingInputFieldsStandard = 16.0;
+  static const double paddingInputFieldsDouble = 20.0;
+}
+
+class AppFontSizes {
+  static const double fontSizeInputHeader1 = 20;
+  static const double fontSizeInputHintText = 10;
+}
+
+class AppBorders {
+  static const double radius = 14.0;
+}
