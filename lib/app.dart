@@ -25,13 +25,18 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         //primarySwatch: AppColors.text,
         inputDecorationTheme: InputDecorationTheme(
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppBorders.radius),
-              borderSide: const BorderSide(color: AppColors.text)),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppBorders.radius),
-              borderSide: const BorderSide(color: AppColors.text)),
-        ),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppBorders.radius),
+                borderSide: const BorderSide(color: AppColors.text)),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppBorders.radius),
+                borderSide: const BorderSide(color: AppColors.text)),
+            errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppBorders.radius),
+                borderSide: BorderSide(color: AppColors.error)),
+            focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppBorders.radius),
+                borderSide: BorderSide(color: AppColors.error))),
         unselectedWidgetColor: AppColors.text,
       ),
       home: const LoginScreen(),
