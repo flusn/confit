@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 class AppPaddings {
   static const double paddingInputFieldsStandard = 16.0;
   static const double paddingInputFieldsDouble = 20.0;
