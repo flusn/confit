@@ -1,7 +1,8 @@
 import "package:flutter/material.dart";
 
 import '../models/allUsers.dart';
-import '../themes/colors.dart';
+import '../templates/readonly.dart';
+import "../themes/themes.dart";
 
 class UserData extends StatelessWidget {
   const UserData({Key? key}) : super(key: key);
@@ -17,6 +18,18 @@ class UserData extends StatelessWidget {
         backgroundColor: AppColors.background,
       ),
       backgroundColor: AppColors.background,
+      body: Card(
+        borderOnForeground: false,
+        color: AppColors.cardColor,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              ReadonlyTextField(title: "Alter", value: user!.age.toString()),
+              ReadonlyTextField(title: "BMI", value: user!.bmi.toString()),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

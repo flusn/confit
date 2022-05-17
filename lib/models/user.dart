@@ -1,9 +1,9 @@
-import "package:flutter/material.dart";
+import 'dart:math';
 
 class User {
   String username;
   String password;
-  int id = 0;
+  final int id = 0;
   String name;
   int? gender;
   DateTime? birthday;
@@ -25,8 +25,24 @@ class User {
       this.fitnesslevel});
 
   void calculateAge() {
-    //this.age = TimeOfDay.now() - birthday.year
+    DateTime today = DateTime.now();
+    age = today.year - birthday!.year;
+
+    if (today.month < birthday!.month) {
+      age--;
+    } else if (today.month == birthday!.month) {
+      if (today.day < birthday!.day) {
+        age--;
+      }
+    }
   }
 
-  calculateBMI() {}
+  double roundDouble(double value, int places) {
+    num mod = pow(10.0, places);
+    return ((value * mod).round().toDouble() / mod);
+  }
+
+  void calculateBMI() {
+    bmi = roundDouble((weight! / (height! * height!) * 100), 4);
+  }
 }

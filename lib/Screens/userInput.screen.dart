@@ -1,9 +1,7 @@
 import "package:flutter/material.dart";
-import "package:confit/themes/colors.dart";
-import "package:confit/themes/textStyles.dart";
-import "package:confit/models/user.dart";
-import "package:confit/repositories/users.repo.dart";
 
+import "../themes/themes.dart";
+import "../templates/input.dart";
 import '../models/allUsers.dart';
 import 'user.screen.dart';
 
@@ -29,8 +27,10 @@ class _UserInputDataScreenState extends State<UserInputDataScreen> {
   final monthFocusNode = FocusNode();
   final yearFocusNode = FocusNode();
   final weightFocusNode = FocusNode();
+  final heightFocusNode = FocusNode();
+  final fintnesslevelFocusNode = FocusNode();
 
-  String fitnesslevel = 'keine';
+  String fitnesslevel = "gar nicht";
 
   @override
   Widget build(BuildContext context) {
@@ -56,11 +56,8 @@ class _UserInputDataScreenState extends State<UserInputDataScreen> {
                       controller: nameController,
                       keyboardType: TextInputType.text,
                       style: const TextStyle(color: AppColors.text),
-                      decoration: const InputDecoration(
-                          labelStyle: TextStyle(color: AppColors.text),
-                          labelText: "Name",
-                          hintStyle: TextStyle(color: AppColors.text),
-                          hintText: "Gib deinen Namen an"),
+                      decoration:
+                          InputfieldDecoration("Name", "Gib deinen Namen an"),
                     ),
                   ),
                   Row(
@@ -222,13 +219,15 @@ class _UserInputDataScreenState extends State<UserInputDataScreen> {
                                 focusNode: weightFocusNode,
                                 keyboardType: TextInputType.number,
                                 style: TextStyle(color: AppColors.text),
-                                decoration: const InputDecoration(
-                                    labelText: "Gewicht",
-                                    labelStyle:
-                                        TextStyle(color: AppColors.text),
-                                    hintText: "Gewicht in kg",
-                                    hintStyle:
-                                        TextStyle(color: AppColors.text)),
+                                decoration: InputfieldDecoration(
+                                    "Gewicht", "Gewicht in kg"),
+                                onChanged: (value) {
+                                  if (double.parse(weightController.text) >
+                                      40) {
+                                    FocusScope.of(context)
+                                        .requestFocus(heightFocusNode);
+                                  }
+                                },
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return "Gewicht fehlt";
@@ -243,15 +242,19 @@ class _UserInputDataScreenState extends State<UserInputDataScreen> {
                                       AppPaddings.paddingInputFieldsStandard),
                                   child: TextFormField(
                                       controller: heightController,
+                                      focusNode: heightFocusNode,
                                       keyboardType: TextInputType.number,
                                       style: TextStyle(color: AppColors.text),
-                                      decoration: const InputDecoration(
-                                          labelText: "Größe",
-                                          labelStyle:
-                                              TextStyle(color: AppColors.text),
-                                          hintText: "Größe in cm",
-                                          hintStyle:
-                                              TextStyle(color: AppColors.text)),
+                                      decoration: InputfieldDecoration(
+                                          "Größe", "Größe in cm"),
+                                      onChanged: (value) {
+                                        if (double.parse(
+                                                heightController.text) >
+                                            100) {
+                                          FocusScope.of(context).requestFocus(
+                                              fintnesslevelFocusNode);
+                                        }
+                                      },
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           return "Größe fehlt";
@@ -265,10 +268,11 @@ class _UserInputDataScreenState extends State<UserInputDataScreen> {
                       child: DropdownButtonFormField<String>(
                           value: fitnesslevel,
                           elevation: 16,
+                          focusNode: fintnesslevelFocusNode,
                           style: const TextStyle(color: AppColors.text),
                           dropdownColor: AppColors.cardColorOverlay,
                           decoration: const InputDecoration(
-                              labelText: "Sportliche Aktivitäten",
+                              labelText: "Sportlich aktiv",
                               labelStyle: TextStyle(color: AppColors.text)),
                           onChanged: (String? newValue) {
                             setState(() {
@@ -279,7 +283,7 @@ class _UserInputDataScreenState extends State<UserInputDataScreen> {
                             "täglich (3 mal pro Woche)",
                             "wöchentlich (1 mal pro Woche)",
                             "monatlich (1 bis 2 mal im Monat)",
-                            "keine"
+                            "gar nicht"
                           ].map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,

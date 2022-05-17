@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
-import "package:confit/themes/colors.dart";
+import "package:confit/themes/themes.dart";
 import 'package:confit/Screens/userInput.screen.dart';
-import "package:confit/themes/textStyles.dart";
 
 import '../models/allUsers.dart';
+import '../templates/input.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("ConFit"),
+        title: const Text("ConFit: Login"),
         backgroundColor: AppColors.background,
       ),
       body: Form(
@@ -51,13 +51,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           controller: userName,
                           keyboardType: TextInputType.text,
                           style: const TextStyle(color: AppColors.text),
-                          decoration: const InputDecoration(
-                            labelStyle: TextStyle(color: AppColors.text),
-                            labelText: "Benutzername",
-                            hintStyle: TextStyle(color: AppColors.text),
-                            hintText:
-                                "Gib deinen Firmen Login an (Max.Mustermann)",
-                          ),
+                          decoration: InputfieldDecoration("Benutzername",
+                              "Gib deinen Firmen Login an (Max.Mustermann)"),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return "Benutzername fehlt";
@@ -75,11 +70,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         controller: password,
                         style: const TextStyle(color: AppColors.text),
                         obscureText: true,
-                        decoration: const InputDecoration(
-                            labelStyle: TextStyle(color: AppColors.text),
-                            labelText: "Passwort",
-                            hintStyle: TextStyle(color: AppColors.text),
-                            hintText: "Gib dein Passwort ein"),
+                        decoration: InputfieldDecoration(
+                            "Passwort", "Gib dein Passwort ein"),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Passwort fehlt";
@@ -92,27 +84,28 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     ElevatedButton(
-                        child: const Text("Anmelden"),
-                        style: ElevatedButton.styleFrom(
-                          primary: AppColors.button,
-                          textStyle: const TextStyle(
-                              fontSize: AppFontSizes.fontSizeInputHeader1),
-                        ),
-                        onPressed: () {
-                          if (_formKey.currentState != null && users != null) {
-                            if (_formKey.currentState!.validate()) {
-                              users.currentUser =
-                                  users.getUserId(userName.text, password.text);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const UserInputDataScreen(),
-                                ),
-                              );
-                            }
+                      child: const Text("Anmelden"),
+                      style: ElevatedButton.styleFrom(
+                        primary: AppColors.button,
+                        textStyle: const TextStyle(
+                            fontSize: AppFontSizes.fontSizeInputHeader1),
+                      ),
+                      onPressed: () {
+                        if (_formKey.currentState != null && users != null) {
+                          if (_formKey.currentState!.validate()) {
+                            users.currentUser =
+                                users.getUserId(userName.text, password.text);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const UserInputDataScreen(),
+                              ),
+                            );
                           }
-                        }),
+                        }
+                      },
+                    ),
                   ],
                 ),
               ),
