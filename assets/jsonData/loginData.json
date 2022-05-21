@@ -1,0 +1,22 @@
+{"users":[
+    {
+        "userId": 1,
+        "username": "philipp.fries",
+        "password": "123456"
+    },
+    {
+        "userId": 2,
+        "username": "sascha.groß",
+        "password": "123456"
+    },
+    {
+        "userId": 3,
+        "username": "manuel.buchmann",
+        "password": "123456"
+    },
+    {
+        "userId": 4,
+        "username": "florian.debus",
+        "password": "123456"
+    }
+]}

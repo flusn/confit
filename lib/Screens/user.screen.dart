@@ -14,7 +14,8 @@ class UserData extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(user!.name, style: const TextStyle(color: AppColors.text)),
+        title:
+            Text("user!.name", style: const TextStyle(color: AppColors.text)),
         backgroundColor: AppColors.background,
       ),
       backgroundColor: AppColors.background,
@@ -24,8 +25,8 @@ class UserData extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              ReadonlyTextField(title: "Alter", value: user!.age.toString()),
-              ReadonlyTextField(title: "BMI", value: user!.bmi.toString()),
+              ReadonlyTextField(title: "Alter", value: "age"),
+              ReadonlyTextField(title: "BMI", value: "bmi"),
             ],
           ),
         ),

@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import "package:flutter/material.dart";
 import "package:confit/themes/themes.dart";
-import 'package:confit/Screens/userInput.screen.dart';
+import 'package:confit/Screens/basedata.dart';
+import 'package:flutter/services.dart';
 
 import '../models/allUsers.dart';
+import '../models/loginData.dart';
 import '../templates/input.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,11 +20,52 @@ class _LoginScreenState extends State<LoginScreen> {
   final userName = TextEditingController();
   final password = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  late final int currentUser;
+  //Map<String, dynamic> _loginData = {};
+  List<dynamic> _loginData = [];
+
+  Future<void> readJson() async {
+    final String response =
+        await rootBundle.loadString('assets/jsonData/loginData.json');
+    final loginDataJson = await json.decode(response);
+    setState(() {
+      _loginData = loginDataJson["users"];
+    });
+  }
+
+  bool checkUsername(String username, List<dynamic> loginData) {
+    bool result = false;
+    for (var element in loginData) {
+      if (userName.text == element["username"]) result = true;
+    }
+    return result;
+  }
+
+  bool checkPassword(
+      String username, String password, List<dynamic> loginData) {
+    bool result = false;
+    for (var element in loginData) {
+      if (username == element["username"] && element["password"] == password) {
+        result = true;
+      }
+    }
+    return result;
+  }
+
+  int getUserId(String username, String password, List<dynamic> loginData) {
+    int result = 0;
+    for (var element in loginData) {
+      if (username == element["username"] && element["password"] == password) {
+        result = element["userId"];
+      }
+    }
+    return result;
+  }
 
   @override
   Widget build(BuildContext context) {
     final users = context.dependOnInheritedWidgetOfExactType<AllUsers>();
-
+    readJson();
     return Scaffold(
       appBar: AppBar(
         title: const Text("ConFit: Login"),
@@ -56,8 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return "Benutzername fehlt";
-                            } else if (users != null &&
-                                !users.checkUsername(value)) {
+                            } else if (!checkUsername(value, _loginData)) {
                               return "Benutzername falsch";
                             }
                             return null;
@@ -75,8 +119,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Passwort fehlt";
-                          } else if (users != null &&
-                              !users.checkPassword(userName.text, value)) {
+                          } else if (!checkPassword(
+                            userName.text,
+                            value,
+                            _loginData,
+                          )) {
                             return "Passwort falsch";
                           }
                           return null;
@@ -91,16 +138,18 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontSize: AppFontSizes.fontSizeInputHeader1),
                       ),
                       onPressed: () {
-                        if (_formKey.currentState != null && users != null) {
+                        if (_formKey.currentState != null) {
                           if (_formKey.currentState!.validate()) {
-                            users.currentUser =
-                                users.getUserId(userName.text, password.text);
+                            currentUser = getUserId(
+                              userName.text,
+                              password.text,
+                              _loginData,
+                            );
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    const UserInputDataScreen(),
-                              ),
+                                  builder: (context) =>
+                                      UserInputDataScreen(userId: currentUser)),
                             );
                           }
                         }

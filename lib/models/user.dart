@@ -1,23 +1,20 @@
 import 'dart:math';
 
 class User {
-  String username;
-  String password;
   final int id = 0;
-  String name;
-  int? gender;
-  DateTime? birthday;
+  final String? name;
+  final int? gender;
+  final DateTime? birthday;
+  final double? weight;
+  final double? height;
+  final int? fitnesslevel;
+
   int age = 0;
-  double? weight;
-  double? height;
   double bmi = 0.0;
-  int? fitnesslevel;
   int points = 0;
 
   User(
-      {required this.username,
-      required this.password,
-      required this.name,
+      {this.name,
       this.gender,
       this.birthday,
       this.weight,
