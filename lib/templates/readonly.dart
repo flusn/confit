@@ -24,7 +24,7 @@ class ReadonlyTextField extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: TextStyle(color: AppColors.text),
+                style: const TextStyle(color: AppColors.text),
               ),
               Text(
                 value,

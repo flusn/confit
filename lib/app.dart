@@ -1,11 +1,8 @@
 import 'package:confit/themes/colors.dart';
 import "package:flutter/material.dart";
 import 'package:confit/Screens/login.screen.dart';
-import "package:confit/themes/colors.dart";
-import "package:confit/themes/textStyles.dart";
 
-import 'models/allUsers.dart';
-import 'models/user.dart';
+import "package:confit/themes/textStyles.dart";
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

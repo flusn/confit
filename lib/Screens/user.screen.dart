@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 
-import '../models/allUsers.dart';
 import '../templates/readonly.dart';
 import "../themes/themes.dart";
 
@@ -9,13 +8,10 @@ class UserData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userclass = context.dependOnInheritedWidgetOfExactType<AllUsers>();
-    final user = userclass!.users[userclass.getCurrentUser()];
-
     return Scaffold(
       appBar: AppBar(
         title:
-            Text("user!.name", style: const TextStyle(color: AppColors.text)),
+            const Text("user!.name", style: TextStyle(color: AppColors.text)),
         backgroundColor: AppColors.background,
       ),
       backgroundColor: AppColors.background,
@@ -25,8 +21,8 @@ class UserData extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              ReadonlyTextField(title: "Alter", value: "age"),
-              ReadonlyTextField(title: "BMI", value: "bmi"),
+              const ReadonlyTextField(title: "Alter", value: "age"),
+              const ReadonlyTextField(title: "BMI", value: "bmi"),
             ],
           ),
         ),
