@@ -7,6 +7,7 @@ import 'package:confit/Screens/home.screen.dart';
 
 import 'package:flutter/services.dart';
 
+import '../models/loginData.dart';
 import '../models/spHelper.dart';
 import '../models/user.dart';
 import '../templates/input.dart';
@@ -24,65 +25,35 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   int currentUser = 0;
 
+  late final AllLoginData _loginData;
   final SPHelper helper = SPHelper();
   Map<String, User>? users;
-  late final User user;
 
-  void updateScreen() {
-    users = helper.getAllUsers();
-    setState(() {});
-  }
-
+  @override
   void initState() {
-    readJson();
     helper.init().then((_) {
       updateScreen();
     });
     super.initState();
   }
 
-  List<dynamic> _loginData = [];
-
   Future<void> readJson() async {
     final String response =
         await rootBundle.loadString('assets/jsonData/loginData.json');
     final loginDataJson = await json.decode(response);
     setState(() {
-      _loginData = loginDataJson["users"];
+      _loginData = AllLoginData(loginDataJson["users"]);
     });
   }
 
-  bool checkUsername(String username, List<dynamic> loginData) {
-    bool result = false;
-    for (var element in loginData) {
-      if (userName.text == element["username"]) result = true;
-    }
-    return result;
-  }
-
-  bool checkPassword(
-      String username, String password, List<dynamic> loginData) {
-    bool result = false;
-    for (var element in loginData) {
-      if (username == element["username"] && element["password"] == password) {
-        result = true;
-      }
-    }
-    return result;
-  }
-
-  int getUserId(String username, String password, List<dynamic> loginData) {
-    int result = 0;
-    for (var element in loginData) {
-      if (username == element["username"] && element["password"] == password) {
-        result = element["userId"];
-      }
-    }
-    return result;
+  void updateScreen() {
+    users = helper.getAllUsers();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    readJson();
     return Scaffold(
       appBar: AppBar(
         title: const Text("ConFit: Login"),
@@ -118,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return "Benutzername fehlt";
-                            } else if (!checkUsername(value, _loginData)) {
+                            } else if (!_loginData.checkUsername(value)) {
                               return "Benutzername falsch";
                             }
                             return null;
@@ -136,10 +107,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Passwort fehlt";
-                          } else if (!checkPassword(
+                          } else if (!_loginData.checkPassword(
                             userName.text,
                             value,
-                            _loginData,
                           )) {
                             return "Passwort falsch";
                           }
@@ -157,10 +127,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                         if (_formKey.currentState != null) {
                           if (_formKey.currentState!.validate()) {
-                            currentUser = getUserId(
+                            currentUser = _loginData.getUserId(
                               userName.text,
                               password.text,
-                              _loginData,
                             );
 
                             if (users != null && users!.isNotEmpty) {
@@ -168,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      HomeScreen(userId: currentUser),
+                                      HomeScreen(user: users![currentUser]),
                                 ),
                               );
                             } else {
