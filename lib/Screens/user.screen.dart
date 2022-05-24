@@ -12,7 +12,6 @@ class UserData extends StatelessWidget {
       appBar: AppBar(
         title:
             const Text("user!.name", style: TextStyle(color: AppColors.text)),
-        backgroundColor: AppColors.background,
       ),
       backgroundColor: AppColors.background,
       body: Card(

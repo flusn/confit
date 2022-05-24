@@ -24,6 +24,12 @@ class MyApp extends StatelessWidget {
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
         //primarySwatch: AppColors.text,
+        appBarTheme: const AppBarTheme(backgroundColor: AppColors.background),
+        scaffoldBackgroundColor: AppColors.background,
+        backgroundColor: AppColors.background,
+        drawerTheme:
+            const DrawerThemeData(backgroundColor: AppColors.background),
+
         inputDecorationTheme: InputDecorationTheme(
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppBorders.radius),

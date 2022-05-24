@@ -28,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   late final AllLoginData _loginData;
   final SPHelper helper = SPHelper();
   Map<String, User>? users;
+  late final User user;
 
   @override
   void initState() {
@@ -57,7 +58,6 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("ConFit: Login"),
-        backgroundColor: AppColors.background,
       ),
       body: Form(
         key: _formKey,
@@ -83,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: TextFormField(
                           controller: userName,
                           keyboardType: TextInputType.text,
-                          style: const TextStyle(color: AppColors.text),
+                          style: TextStyles.textnormal,
                           decoration: inputfieldDecoration("Benutzername",
                               "Gib deinen Firmen Login an (Max.Mustermann)"),
                           validator: (value) {
@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           AppPaddings.paddingInputFieldsStandard),
                       child: TextFormField(
                         controller: password,
-                        style: const TextStyle(color: AppColors.text),
+                        style: TextStyles.textnormal,
                         obscureText: true,
                         decoration: inputfieldDecoration(
                             "Passwort", "Gib dein Passwort ein"),
@@ -132,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               password.text,
                             );
 
-                            if (users != null && users!.isNotEmpty) {
+                            if (users![currentUser.toString()] != null) {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -145,7 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      UserInputDataScreen(userId: currentUser),
+                                      BasedataScreen(userId: currentUser),
                                 ),
                               );
                             }
@@ -160,7 +160,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-      backgroundColor: AppColors.background,
     );
   }
 }
