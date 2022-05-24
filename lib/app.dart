@@ -4,6 +4,8 @@ import 'package:confit/Screens/login.screen.dart';
 
 import "package:confit/themes/textStyles.dart";
 
+import 'models/user.dart';
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 

@@ -14,11 +14,14 @@ import "../templates/input.dart";
 import 'user.screen.dart';
 
 class BasedataScreen extends StatefulWidget {
-  //final Storage storage;
+  final User? user;
   final int? userId;
 
-  const BasedataScreen({Key? key, /*required this.storage, */ this.userId})
-      : super(key: key);
+  const BasedataScreen({
+    Key? key,
+    this.userId,
+    this.user,
+  }) : super(key: key);
 
   @override
   State<BasedataScreen> createState() => _BasedataScreenState();
@@ -31,70 +34,8 @@ class _BasedataScreenState extends State<BasedataScreen> {
   late User currentUser = helper.getUser(widget.userId.toString());
   final SPHelper helper = SPHelper();
 
-  /*
-  File? jsonFile;
-  Directory? dir;
-  String filename = "myJsonFile.json";
-  bool fileExists = false;
-  Map<String, dynamic>? fileContent;
-  late Future<Directory?> dirExtern;
-  String state = "";
-  final File file = File("assets/jsonData/allUsers.json");
-  final controller = TextEditingController();
-  @override
-  void initState() {
-    super.initState();
-
-    getApplicationDocumentsDirectory().then((Directory directory) {
-      dir = directory;
-      jsonFile = new File(dir!.path + "/" + filename);
-
-      fileExists = jsonFile!.existsSync();
-      if (fileExists) {
-        this.setState(
-            () => fileContent = json.decode(jsonFile!.readAsStringSync()));
-      }
-    });
-  }
-  void createFile(
-      Map<String, dynamic> content, Directory dir, String filename) {
-    print("Creating a File!");
-    File file = new File(dir.path + "/" + filename);
-    file.createSync();
-    fileExists = true;
-    file.writeAsStringSync(json.encode(content));
-  }
-
-  void writeToFile(User user) {
-    print("Write to File");
-    Map<String, dynamic> content = user.toJson();
-    if (fileExists) {
-      print("File exists");
-      Map<String, dynamic> jsonFileContent =
-          json.decode(jsonFile!.readAsStringSync());
-      jsonFileContent.addAll(content);
-      jsonFile!.writeAsStringSync(json.encode(jsonFileContent));
-    } else {
-      print("File does Not exists");
-      createFile(content, dir!, filename);
-    }
-    this.setState(
-        () => fileContent = json.decode(jsonFile!.readAsStringSync()));
-  }
-  Future<File> writeData() async {
-    setState(() {
-      state = nameController.text;
-      nameController.text = "";
-    });
-    return widget.storage.writeData(state);
-  }
-  
-    Future<void> readJson() async {
-    String users = await file.readAsString();
-    var jsonResponse = jsonDecode(users);
-  }*/
-
   final _formKey = GlobalKey<FormState>();
+
   final nameController = TextEditingController();
   GenderCharacter? genderController = GenderCharacter.m;
   final dayController = TextEditingController();
@@ -122,6 +63,16 @@ class _BasedataScreenState extends State<BasedataScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.user != null) {
+      nameController.text = widget.user!.name!;
+      //genderController = widget.user!.gender!;
+      dayController.text = widget.user!.birthday!.day.toString();
+      monthController.text = widget.user!.birthday!.month.toString();
+      yearController.text = widget.user!.birthday!.year.toString();
+      weightController.text = widget.user!.weight.toString();
+      heightController.text = widget.user!.height.toString();
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("ConFit"),

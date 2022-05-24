@@ -27,8 +27,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   late final AllLoginData _loginData;
   final SPHelper helper = SPHelper();
-  Map<String, User>? users;
-  late final User user;
+  late final Map<String, User>? users;
+  late final User? user;
 
   @override
   void initState() {
@@ -132,12 +132,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               password.text,
                             );
 
-                            if (users![currentUser.toString()] != null) {
+                            if (users != null &&
+                                users![currentUser.toString()] != null) {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      HomeScreen(user: users![currentUser]),
+                                  builder: (context) => HomeScreen(
+                                      user: users![currentUser.toString()]!),
                                 ),
                               );
                             } else {
