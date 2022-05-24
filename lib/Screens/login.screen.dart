@@ -30,6 +30,20 @@ class _LoginScreenState extends State<LoginScreen> {
   late final Map<String, User>? users;
   late final User? user;
 
+  bool displayPassword = false;
+  String textPasswordTooltip = "Passwort anzeigen";
+
+  void showPassword() {
+    if (displayPassword) {
+      textPasswordTooltip = "Passwort anzeigen";
+    } else {
+      textPasswordTooltip = "Passwort verbergen";
+    }
+    displayPassword = !displayPassword;
+
+    setState(() {});
+  }
+
   @override
   void initState() {
     helper.init().then((_) {
@@ -82,6 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             AppPaddings.paddingInputFieldsStandard),
                         child: TextFormField(
                           controller: userName,
+                          cursorColor: AppColors.background,
                           keyboardType: TextInputType.text,
                           style: TextStyles.textnormal,
                           decoration: inputfieldDecoration("Benutzername",
@@ -98,23 +113,54 @@ class _LoginScreenState extends State<LoginScreen> {
                     Padding(
                       padding: const EdgeInsets.all(
                           AppPaddings.paddingInputFieldsStandard),
-                      child: TextFormField(
-                        controller: password,
-                        style: TextStyles.textnormal,
-                        obscureText: true,
-                        decoration: inputfieldDecoration(
-                            "Passwort", "Gib dein Passwort ein"),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Passwort fehlt";
-                          } else if (!_loginData.checkPassword(
-                            userName.text,
-                            value,
-                          )) {
-                            return "Passwort falsch";
-                          }
-                          return null;
-                        },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            controller: password,
+                            cursorColor: AppColors.background,
+                            style: TextStyles.textnormal,
+                            obscureText: displayPassword ? false : true,
+                            decoration: inputfieldDecoration(
+                                    "Passwort", "Gib dein Passwort ein")
+                                .copyWith(
+                              suffixIcon: IconButton(
+                                  tooltip: textPasswordTooltip,
+                                  color: AppColors.text,
+                                  icon: displayPassword
+                                      ? const Icon(Icons.visibility_off)
+                                      : const Icon(Icons.visibility),
+                                  onPressed: showPassword),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Passwort fehlt";
+                              } else if (!_loginData.checkPassword(
+                                userName.text,
+                                value,
+                              )) {
+                                return "Passwort falsch";
+                              }
+                              return null;
+                            },
+                          ),
+                          TextButton(
+                            onPressed: () {},
+                            style: TextButton.styleFrom(
+                                alignment: Alignment.centerLeft,
+                                minimumSize: const Size(50, 30),
+                                padding:
+                                    const EdgeInsets.only(top: -4, left: 8),
+                                tapTargetSize:
+                                    MaterialTapTargetSize.shrinkWrap),
+                            child: Text(
+                              "Passwort vergessen",
+                              style:
+                                  TextStyles.textnormal.copyWith(fontSize: 10),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     ElevatedButton(
