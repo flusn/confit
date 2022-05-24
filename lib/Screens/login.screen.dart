@@ -3,10 +3,12 @@ import 'dart:convert';
 import "package:flutter/material.dart";
 import "package:confit/themes/themes.dart";
 import 'package:confit/Screens/basedata.dart';
+import 'package:confit/Screens/home.screen.dart';
+
 import 'package:flutter/services.dart';
 
-import '../models/allUsers.dart';
-import '../models/loginData.dart';
+import '../models/spHelper.dart';
+import '../models/user.dart';
 import '../templates/input.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -20,8 +22,25 @@ class _LoginScreenState extends State<LoginScreen> {
   final userName = TextEditingController();
   final password = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  late final int currentUser;
-  //Map<String, dynamic> _loginData = {};
+  int currentUser = 0;
+
+  final SPHelper helper = SPHelper();
+  Map<String, User>? users;
+  late final User user;
+
+  void updateScreen() {
+    users = helper.getAllUsers();
+    setState(() {});
+  }
+
+  void initState() {
+    readJson();
+    helper.init().then((_) {
+      updateScreen();
+    });
+    super.initState();
+  }
+
   List<dynamic> _loginData = [];
 
   Future<void> readJson() async {
@@ -64,8 +83,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final users = context.dependOnInheritedWidgetOfExactType<AllUsers>();
-    readJson();
     return Scaffold(
       appBar: AppBar(
         title: const Text("ConFit: Login"),
@@ -96,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           controller: userName,
                           keyboardType: TextInputType.text,
                           style: const TextStyle(color: AppColors.text),
-                          decoration: InputfieldDecoration("Benutzername",
+                          decoration: inputfieldDecoration("Benutzername",
                               "Gib deinen Firmen Login an (Max.Mustermann)"),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -114,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         controller: password,
                         style: const TextStyle(color: AppColors.text),
                         obscureText: true,
-                        decoration: InputfieldDecoration(
+                        decoration: inputfieldDecoration(
                             "Passwort", "Gib dein Passwort ein"),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -145,12 +162,24 @@ class _LoginScreenState extends State<LoginScreen> {
                               password.text,
                               _loginData,
                             );
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
+
+                            if (users != null && users!.isNotEmpty) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
                                   builder: (context) =>
-                                      UserInputDataScreen(userId: currentUser)),
-                            );
+                                      HomeScreen(userId: currentUser),
+                                ),
+                              );
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      UserInputDataScreen(userId: currentUser),
+                                ),
+                              );
+                            }
                           }
                         }
                       },
