@@ -1,14 +1,12 @@
 import "package:flutter/material.dart";
+import 'package:get/get.dart';
 import '../Screens/screens.dart';
-import '../models/user.dart';
 import '../themes/textStyles.dart';
+import '../themes/themes.dart';
 
 class MenuDrawer extends StatelessWidget {
-  final User user;
-
   const MenuDrawer({
     Key? key,
-    required this.user,
   }) : super(key: key);
 
   @override
@@ -42,10 +40,10 @@ class MenuDrawer extends StatelessWidget {
           onTap: () {
             switch (element) {
               case "Home":
-                screen = HomeScreen(user: user);
+                screen = const HomeScreen();
                 break;
               case "Stammdaten":
-                screen = BasedataScreen(user: user);
+                screen = const BasedataScreen();
                 break;
               case "Gewichtsanpassungen":
                 () {};
@@ -60,9 +58,7 @@ class MenuDrawer extends StatelessWidget {
                 () {};
                 break;
             }
-            Navigator.of(context).pop();
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => screen));
+            Get.to(screen);
           },
         ),
       );

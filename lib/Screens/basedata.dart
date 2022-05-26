@@ -1,26 +1,15 @@
-//import 'dart:convert';
-//import 'package:path_provider/path_provider.dart';
-//import 'dart:io';
-//import '../models/allUsers.dart';
-//import 'package:flutter/services.dart';
-//import '../models/storageManagement.dart';
 import "package:flutter/material.dart";
-import '../models/spHelper.dart';
-
 import '../models/user.dart';
+import '../models/userController.dart';
 import "../themes/themes.dart";
 import "../templates/input.dart";
-
-import 'user.screen.dart';
+import 'package:get/get.dart';
+import 'home.screen.dart';
+import 'package:get_storage/get_storage.dart';
 
 class BasedataScreen extends StatefulWidget {
-  final User? user;
-  final int? userId;
-
   const BasedataScreen({
     Key? key,
-    this.userId,
-    this.user,
   }) : super(key: key);
 
   @override
@@ -30,9 +19,8 @@ class BasedataScreen extends StatefulWidget {
 enum GenderCharacter { m, w, d, n }
 
 class _BasedataScreenState extends State<BasedataScreen> {
-  Map<String, User> users = {};
-  late User currentUser = helper.getUser(widget.userId.toString());
-  final SPHelper helper = SPHelper();
+  final usersStorage = GetStorage("users");
+  Controller c = Get.find();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -53,24 +41,15 @@ class _BasedataScreenState extends State<BasedataScreen> {
   String fitnesslevel = "gar nicht";
 
   @override
-  Future saveUser(User user) async {
-    helper.writeUser(user).then((_) {
-      setState(() {
-        users[widget.userId.toString()] = currentUser;
-      });
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    if (widget.user != null) {
-      nameController.text = widget.user!.name!;
+    if (c.user.value.name != null) {
+      nameController.text = c.user.value.name.toString();
       //genderController = widget.user!.gender!;
-      dayController.text = widget.user!.birthday!.day.toString();
-      monthController.text = widget.user!.birthday!.month.toString();
-      yearController.text = widget.user!.birthday!.year.toString();
-      weightController.text = widget.user!.weight.toString();
-      heightController.text = widget.user!.height.toString();
+      dayController.text = c.user.value.birthday!.day.toString();
+      monthController.text = c.user.value.birthday!.month.toString();
+      yearController.text = c.user.value.birthday!.year.toString();
+      weightController.text = c.user.value.weight.toString();
+      heightController.text = c.user.value.height.toString();
     }
 
     return Scaffold(
@@ -344,36 +323,18 @@ class _BasedataScreenState extends State<BasedataScreen> {
                   onPressed: () {
                     if (_formKey.currentState != null) {
                       if (_formKey.currentState!.validate()) {
-                        setState(() {
-                          currentUser = User(
-                              id: widget.userId,
-                              name: nameController.text,
-                              birthday: DateTime(
-                                  int.parse(yearController.text),
-                                  int.parse(monthController.text),
-                                  int.parse(dayController.text)),
-                              height: double.parse(heightController.text),
-                              weight: double.parse(weightController.text));
-                        });
-                        saveUser(currentUser);
-
-                        //readJson();
-                        //writeData();
-                        //Map<String, dynamic> jsonliste = _userData.toJson();
-                        //file.writeAsStringSync(json.encode(jsonliste));
-
-                        //writeToFile(_userData);
-
-                        //widget.storage.writeFilesToCustomDevicePath();
-
-                        //file.writeAsStringSync(json.encode(users));
-
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const UserData(),
-                          ),
-                        );
+                        c.user.value = User(
+                            id: c.currentUser.value,
+                            name: nameController.text,
+                            birthday: DateTime(
+                                int.parse(yearController.text),
+                                int.parse(monthController.text),
+                                int.parse(dayController.text)),
+                            height: double.parse(heightController.text),
+                            weight: double.parse(weightController.text));
+                        c.users[c.currentUser.value.toString()] = c.user.value;
+                        usersStorage.write("users", c.users);
+                        Get.to(const HomeScreen());
                       }
                     }
                   },

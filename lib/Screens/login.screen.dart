@@ -4,12 +4,11 @@ import "package:flutter/material.dart";
 import "package:confit/themes/themes.dart";
 import 'package:confit/Screens/basedata.dart';
 import 'package:confit/Screens/home.screen.dart';
-
+import 'package:get/get.dart';
 import 'package:flutter/services.dart';
-
+import 'package:get_storage/get_storage.dart';
 import '../models/loginData.dart';
-import '../models/spHelper.dart';
-import '../models/user.dart';
+import '../models/userController.dart';
 import '../templates/input.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -25,10 +24,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   int currentUser = 0;
 
+  final usersStorage = GetStorage("users");
+  final Controller c = Get.put(Controller());
+
   late final AllLoginData _loginData;
-  final SPHelper helper = SPHelper();
-  late final Map<String, User>? users;
-  late final User? user;
 
   bool displayPassword = false;
   String textPasswordTooltip = "Passwort anzeigen";
@@ -44,14 +43,6 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {});
   }
 
-  @override
-  void initState() {
-    helper.init().then((_) {
-      updateScreen();
-    });
-    super.initState();
-  }
-
   Future<void> readJson() async {
     final String response =
         await rootBundle.loadString('assets/jsonData/loginData.json');
@@ -61,13 +52,18 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  void updateScreen() {
-    users = helper.getAllUsers();
-    setState(() {});
+  @override
+  void initState() {
+    if (usersStorage.read("users") != null) {
+      c.users.value = usersStorage.read("users");
+    }
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    //final Controller c = Get.put(Controller());
+
     readJson();
     return Scaffold(
       appBar: AppBar(
@@ -173,28 +169,18 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                         if (_formKey.currentState != null) {
                           if (_formKey.currentState!.validate()) {
-                            currentUser = _loginData.getUserId(
+                            c.currentUser.value = _loginData.getUserId(
                               userName.text,
                               password.text,
                             );
 
-                            if (users != null &&
-                                users![currentUser.toString()] != null) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => HomeScreen(
-                                      user: users![currentUser.toString()]!),
-                                ),
-                              );
+                            if (c.users[c.currentUser.value.toString()] !=
+                                null) {
+                              c.setUserData(
+                                  c.users[c.currentUser.value.toString()]);
+                              Get.to(const HomeScreen());
                             } else {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      BasedataScreen(userId: currentUser),
-                                ),
-                              );
+                              Get.to(const BasedataScreen());
                             }
                           }
                         }
