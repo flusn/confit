@@ -47,6 +47,7 @@ class MenuDrawer extends StatelessWidget {
                 break;
               case "Gewichtsanpassungen":
                 () {};
+                //screen = const WeightdataScreen();
                 break;
               case "Trainingssets":
                 () {};

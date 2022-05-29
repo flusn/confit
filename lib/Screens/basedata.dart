@@ -16,16 +16,15 @@ class BasedataScreen extends StatefulWidget {
   State<BasedataScreen> createState() => _BasedataScreenState();
 }
 
-enum GenderCharacter { m, w, d, n }
-
 class _BasedataScreenState extends State<BasedataScreen> {
-  final usersStorage = GetStorage("users");
   Controller c = Get.find();
+  GetStorage userstorage = GetStorage();
 
   final _formKey = GlobalKey<FormState>();
 
+  bool userdatafistInput = true;
   final nameController = TextEditingController();
-  GenderCharacter? genderController = GenderCharacter.m;
+  Gender? genderController;
   final dayController = TextEditingController();
   final monthController = TextEditingController();
   final yearController = TextEditingController();
@@ -35,23 +34,38 @@ class _BasedataScreenState extends State<BasedataScreen> {
   final monthFocusNode = FocusNode();
   final yearFocusNode = FocusNode();
   final weightFocusNode = FocusNode();
+
   final heightFocusNode = FocusNode();
   final fintnesslevelFocusNode = FocusNode();
 
   String fitnesslevel = "gar nicht";
 
+  //Wurde der Benutzer bereits angelegt, werden die Stammdaten aus dem Storage geladen
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     if (c.user.value.name != null) {
+      userdatafistInput = false;
       nameController.text = c.user.value.name.toString();
-      //genderController = widget.user!.gender!;
+    }
+    if (c.user.value.gender != null) {
+      genderController = c.user.value.gender;
+      userdatafistInput = false;
+    }
+    if (c.user.value.birthday != null) {
       dayController.text = c.user.value.birthday!.day.toString();
       monthController.text = c.user.value.birthday!.month.toString();
       yearController.text = c.user.value.birthday!.year.toString();
-      weightController.text = c.user.value.weight.toString();
-      heightController.text = c.user.value.height.toString();
+      userdatafistInput = false;
     }
+    if (c.user.value.height != null) {
+      heightController.text = c.user.value.height.toString();
+      userdatafistInput = false;
+    }
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("ConFit"),
@@ -83,11 +97,11 @@ class _BasedataScreenState extends State<BasedataScreen> {
                           "männlich",
                           style: TextStyle(color: AppColors.text),
                         ),
-                        leading: Radio<GenderCharacter>(
+                        leading: Radio<Gender>(
                           activeColor: AppColors.text,
-                          value: GenderCharacter.m,
+                          value: Gender.Male,
                           groupValue: genderController,
-                          onChanged: (GenderCharacter? value) {
+                          onChanged: (Gender? value) {
                             setState(() {
                               genderController = value;
                             });
@@ -101,11 +115,11 @@ class _BasedataScreenState extends State<BasedataScreen> {
                           "weiblich",
                           style: TextStyle(color: AppColors.text),
                         ),
-                        leading: Radio<GenderCharacter>(
+                        leading: Radio<Gender>(
                           activeColor: AppColors.text,
-                          value: GenderCharacter.w,
+                          value: Gender.Female,
                           groupValue: genderController,
-                          onChanged: (GenderCharacter? value) {
+                          onChanged: (Gender? value) {
                             setState(() {
                               genderController = value;
                             });
@@ -226,66 +240,55 @@ class _BasedataScreenState extends State<BasedataScreen> {
                     ],
                   ),
                 ),
-                Padding(
+                if (userdatafistInput)
+                  Padding(
                     padding: const EdgeInsets.all(
                         AppPaddings.paddingInputFieldsStandard),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(
-                                AppPaddings.paddingInputFieldsStandard),
-                            child: TextFormField(
-                              controller: weightController,
-                              focusNode: weightFocusNode,
-                              keyboardType: TextInputType.number,
-                              style: const TextStyle(color: AppColors.text),
-                              decoration: inputfieldDecoration(
-                                  "Gewicht", "Gewicht in kg"),
-                              onChanged: (value) {
-                                if (double.parse(weightController.text) > 40) {
-                                  FocusScope.of(context)
-                                      .requestFocus(heightFocusNode);
-                                }
-                              },
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Gewicht fehlt";
-                                } else {
-                                  return null;
-                                }
-                              },
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                            child: Padding(
-                                padding: const EdgeInsets.all(
-                                    AppPaddings.paddingInputFieldsStandard),
-                                child: TextFormField(
-                                    controller: heightController,
-                                    focusNode: heightFocusNode,
-                                    keyboardType: TextInputType.number,
-                                    style:
-                                        const TextStyle(color: AppColors.text),
-                                    decoration: inputfieldDecoration(
-                                        "Größe", "Größe in cm"),
-                                    onChanged: (value) {
-                                      if (double.parse(heightController.text) >
-                                          100) {
-                                        FocusScope.of(context).requestFocus(
-                                            fintnesslevelFocusNode);
-                                      }
-                                    },
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return "Größe fehlt";
-                                      } else {
-                                        return null;
-                                      }
-                                    }))),
-                      ],
-                    )),
+                    child: TextFormField(
+                      controller: weightController,
+                      focusNode: weightFocusNode,
+                      keyboardType: TextInputType.number,
+                      style: const TextStyle(color: AppColors.text),
+                      decoration:
+                          inputfieldDecoration("Gewicht", "Gewicht in kg"),
+                      onChanged: (value) {
+                        if (double.parse(weightController.text) > 20) {
+                          FocusScope.of(context).requestFocus(heightFocusNode);
+                        }
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Gewicht fehlt";
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+                Padding(
+                  padding: const EdgeInsets.all(
+                      AppPaddings.paddingInputFieldsStandard),
+                  child: TextFormField(
+                    controller: heightController,
+                    focusNode: heightFocusNode,
+                    keyboardType: TextInputType.number,
+                    style: const TextStyle(color: AppColors.text),
+                    decoration: inputfieldDecoration("Größe", "Größe in cm"),
+                    onChanged: (value) {
+                      if (double.parse(heightController.text) > 100) {
+                        FocusScope.of(context)
+                            .requestFocus(fintnesslevelFocusNode);
+                      }
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Größe fehlt";
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                ),
                 Padding(
                     padding: const EdgeInsets.all(
                         AppPaddings.paddingInputFieldsStandard),
@@ -320,25 +323,38 @@ class _BasedataScreenState extends State<BasedataScreen> {
                       primary: AppColors.button,
                       textStyle: const TextStyle(
                           fontSize: AppFontSizes.fontSizeInputHeader1)),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState != null) {
                       if (_formKey.currentState!.validate()) {
                         c.user.value = User(
-                            id: c.currentUser.value,
-                            name: nameController.text,
-                            birthday: DateTime(
-                                int.parse(yearController.text),
-                                int.parse(monthController.text),
-                                int.parse(dayController.text)),
-                            height: double.parse(heightController.text),
-                            weight: double.parse(weightController.text));
+                          id: c.currentUser.value,
+                          name: nameController.text,
+                          gender: genderController,
+                          birthday: DateTime(
+                              int.parse(yearController.text),
+                              int.parse(monthController.text),
+                              int.parse(dayController.text)),
+                          height: double.parse(heightController.text),
+                        );
+                        c.user.value.calculateAge();
+                        if (userdatafistInput) {
+                          c.user.value.weightChanges = [
+                            WeightChange(
+                                time: DateTime.now(),
+                                weight: double.parse(weightController.text))
+                          ];
+                          c.user.value.weightChanges![0].calculateBMI(
+                              double.parse(heightController.text));
+                        }
+
                         c.users[c.currentUser.value.toString()] = c.user.value;
-                        usersStorage.write("users", c.users);
-                        Get.to(const HomeScreen());
+                        await userstorage.write('users', c.users);
+                        Get.to(() => const HomeScreen());
                       }
                     }
                   },
                 ),
+                const SizedBox(height: 20)
               ],
             ),
           ),

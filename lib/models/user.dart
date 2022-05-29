@@ -1,11 +1,31 @@
 import 'dart:math';
 import 'package:intl/intl.dart';
 
+enum Gender { Male, Female }
+
+class WeightChange {
+  DateTime? time;
+  double? weight;
+  double? bmi;
+
+  WeightChange({this.time, this.weight});
+
+  double roundDouble(double value, int places) {
+    num mod = pow(10.0, places);
+    return ((value * mod).round().toDouble() / mod);
+  }
+
+  void calculateBMI(double height) {
+    bmi = roundDouble((weight! / (height * height) * 100), 4);
+  }
+}
+
 class User {
   int? id;
   String? name;
-  int? gender;
+  Gender? gender;
   DateTime? birthday;
+  List<WeightChange>? weightChanges;
   double? weight;
   double? height;
   int? fitnesslevel;
@@ -19,6 +39,7 @@ class User {
       this.name,
       this.gender,
       this.birthday,
+      this.weightChanges,
       this.weight,
       this.height,
       this.fitnesslevel});

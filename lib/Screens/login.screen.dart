@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final usersStorage = GetStorage("users");
   final Controller c = Get.put(Controller());
 
-  late final AllLoginData _loginData;
+  AllLoginData _loginData = AllLoginData([]);
 
   bool displayPassword = false;
   String textPasswordTooltip = "Passwort anzeigen";
@@ -62,8 +62,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //final Controller c = Get.put(Controller());
-
     readJson();
     return Scaffold(
       appBar: AppBar(
@@ -178,14 +176,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                 null) {
                               c.setUserData(
                                   c.users[c.currentUser.value.toString()]);
-                              Get.to(const HomeScreen());
+                              Get.to(() => const HomeScreen());
                             } else {
-                              Get.to(const BasedataScreen());
+                              Get.to(() => const BasedataScreen());
                             }
                           }
                         }
                       },
                     ),
+                    const SizedBox(height: 20)
                   ],
                 ),
               ),

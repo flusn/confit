@@ -22,4 +22,8 @@ class Controller extends GetxController {
     user.value.points = userStorage["points"];
     user.value.weight = userStorage["weight"];
   }
+
+  void setUserWeightData(Map<String, dynamic> userWeightStorage) {
+    user.value.weightChanges = userWeightStorage["weightChanges"];
+  }
 }
