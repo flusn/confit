@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import '../models/user.dart';
-import '../models/userController.dart';
+import '../models/user_controller.dart';
 import "../themes/themes.dart";
 import "../templates/input.dart";
 import 'package:get/get.dart';
@@ -18,7 +18,7 @@ class BasedataScreen extends StatefulWidget {
 
 class _BasedataScreenState extends State<BasedataScreen> {
   Controller c = Get.find();
-  GetStorage userstorage = GetStorage();
+  final userstorage = GetStorage();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -99,7 +99,7 @@ class _BasedataScreenState extends State<BasedataScreen> {
                         ),
                         leading: Radio<Gender>(
                           activeColor: AppColors.text,
-                          value: Gender.Male,
+                          value: Gender.male,
                           groupValue: genderController,
                           onChanged: (Gender? value) {
                             setState(() {
@@ -117,7 +117,7 @@ class _BasedataScreenState extends State<BasedataScreen> {
                         ),
                         leading: Radio<Gender>(
                           activeColor: AppColors.text,
-                          value: Gender.Female,
+                          value: Gender.female,
                           groupValue: genderController,
                           onChanged: (Gender? value) {
                             setState(() {
@@ -327,7 +327,7 @@ class _BasedataScreenState extends State<BasedataScreen> {
                     if (_formKey.currentState != null) {
                       if (_formKey.currentState!.validate()) {
                         c.user.value = User(
-                          id: c.currentUser.value,
+                          id: c.currentUserId.value,
                           name: nameController.text,
                           gender: genderController,
                           birthday: DateTime(
@@ -343,18 +343,29 @@ class _BasedataScreenState extends State<BasedataScreen> {
                                 time: DateTime.now(),
                                 weight: double.parse(weightController.text))
                           ];
-                          c.user.value.weightChanges![0].calculateBMI(
+                          c.user.value.weightChanges!.elementAt(0).calculateBMI(
                               double.parse(heightController.text));
                         }
 
-                        c.users[c.currentUser.value.toString()] = c.user.value;
-                        await userstorage.write('users', c.users);
+                        c.users[c.currentUserId.value.toString()] =
+                            c.user.value;
+                        final userAsNormalMap = c.user.value.toJson();
+
+                        await userstorage.write(
+                            c.currentUserId.value.toString(), userAsNormalMap);
+
+                        /*                        
+                        await userstorage.write('users',
+                          c.users.entries.map((e) => e.value.toJson()));*/
+                        //await userstorage.write('users', 1);
+
+                        //c.users.entries.map((e) => e.value.toJson()));
                         Get.to(() => const HomeScreen());
                       }
                     }
                   },
                 ),
-                const SizedBox(height: 20)
+                const SizedBox(height: AppPaddings.paddingInputFieldsStandard)
               ],
             ),
           ),

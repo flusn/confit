@@ -1,14 +1,14 @@
 import 'dart:math';
 import 'package:intl/intl.dart';
 
-enum Gender { Male, Female }
+enum Gender { male, female }
 
 class WeightChange {
   DateTime? time;
   double? weight;
   double? bmi;
 
-  WeightChange({this.time, this.weight});
+  WeightChange({this.time, this.weight, this.bmi});
 
   double roundDouble(double value, int places) {
     num mod = pow(10.0, places);
@@ -18,6 +18,15 @@ class WeightChange {
   void calculateBMI(double height) {
     bmi = roundDouble((weight! / (height * height) * 100), 4);
   }
+
+  Map<String, dynamic> toJson() {
+    String formattedtime = DateFormat('dd-MM-yyyy').format(time!);
+    return {
+      "time": formattedtime,
+      "weight": weight,
+      "bmi": bmi,
+    };
+  }
 }
 
 class User {
@@ -26,7 +35,6 @@ class User {
   Gender? gender;
   DateTime? birthday;
   List<WeightChange>? weightChanges;
-  double? weight;
   double? height;
   int? fitnesslevel;
 
@@ -40,7 +48,6 @@ class User {
       this.gender,
       this.birthday,
       this.weightChanges,
-      this.weight,
       this.height,
       this.fitnesslevel});
 
@@ -57,41 +64,69 @@ class User {
     }
   }
 
-  double roundDouble(double value, int places) {
-    num mod = pow(10.0, places);
-    return ((value * mod).round().toDouble() / mod);
-  }
-
-  void calculateBMI() {
-    bmi = roundDouble((weight! / (height! * height!) * 100), 4);
-  }
-
-  User.fromJson(Map<String, dynamic> userMap) {
-    String birthdayAsString = userMap["birthday"] ?? "";
-    if (birthdayAsString != "") {
-      birthday = DateFormat('MM-dd-yyyy').parse(birthdayAsString);
+  Map<String, double> calculateIdealBMI(int age, Gender gender) {
+    double idealBmiMin = 0.0;
+    double idealBmiMax = 0.0;
+    if (gender == Gender.male) {
+      if (age <= 16) {
+        idealBmiMin = 19;
+        idealBmiMax = 24;
+      } else if (age <= 18) {
+        idealBmiMin = 20;
+        idealBmiMax = 25;
+      } else if (age <= 24) {
+        idealBmiMin = 21;
+        idealBmiMax = 26;
+      } else if (age <= 34) {
+        idealBmiMin = 22;
+        idealBmiMax = 27;
+      } else if (age <= 54) {
+        idealBmiMin = 23;
+        idealBmiMax = 28;
+      } else if (age <= 64) {
+        idealBmiMin = 24;
+        idealBmiMax = 29;
+      } else {
+        idealBmiMin = 25;
+        idealBmiMax = 30;
+      }
+    } else {
+      if (age <= 24) {
+        idealBmiMin = 19;
+        idealBmiMax = 24;
+      } else if (age <= 34) {
+        idealBmiMin = 20;
+        idealBmiMax = 25;
+      } else if (age <= 44) {
+        idealBmiMin = 21;
+        idealBmiMax = 26;
+      } else if (age <= 54) {
+        idealBmiMin = 22;
+        idealBmiMax = 27;
+      } else if (age <= 64) {
+        idealBmiMin = 23;
+        idealBmiMax = 28;
+      } else {
+        idealBmiMin = 25;
+        idealBmiMax = 30;
+      }
     }
-    id = userMap["userid"] ?? 0;
-    name = userMap["name"] ?? "";
-    gender = userMap["gender"] ?? 0;
-    weight = userMap["weight"] ?? 0.0;
-    height = userMap["height"] ?? 0.0;
-    fitnesslevel = userMap["fitnesslevel"] ?? 0;
-    age = userMap["age"] ?? 0;
-    bmi = userMap["bmi"] ?? 0.0;
-    points = userMap["points"] ?? 0;
+    return {"min": idealBmiMin, "max": idealBmiMax};
   }
 
   Map<String, dynamic> toJson() {
-    String formattedDate = DateFormat('MM-dd-yyyy').format(birthday!);
-
+    String formattedBirthday = DateFormat('dd-MM-yyyy').format(birthday!);
+    List<Map<String, dynamic>>? weightChangesToJson;
+    if (weightChanges != null) {
+      weightChangesToJson = weightChanges!.map((e) => e.toJson()).toList();
+    }
     return {
       "userId": id,
       "name": name,
-      "gender": gender,
-      "birthday": formattedDate,
-      "weight": weight,
+      "gender": gender == Gender.male ? 'male' : 'female',
+      "birthday": formattedBirthday,
       "height": height,
+      "weightChanges": weightChangesToJson ?? [],
       "fitnesslevel": fitnesslevel,
       "age": age,
       "bmi": bmi,
