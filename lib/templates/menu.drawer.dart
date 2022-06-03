@@ -1,3 +1,6 @@
+import 'package:confit/Screens/ranking.screen.dart';
+import 'package:confit/Screens/shop.screen.dart';
+import 'package:confit/Screens/trainingsets.screen.dart';
 import "package:flutter/material.dart";
 import 'package:get/get.dart';
 import '../Screens/screens.dart';
@@ -49,13 +52,13 @@ class MenuDrawer extends StatelessWidget {
                 screen = const WeightdataScreen();
                 break;
               case "Trainingssets":
-                () {};
+                screen = const TrainingsetsScreen();
                 break;
               case "Shop":
-                () {};
+                screen = const ShopScreen();
                 break;
               case "Rangliste":
-                () {};
+                screen = const RankingScreen();
                 break;
             }
             Get.to(screen);

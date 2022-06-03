@@ -27,13 +27,18 @@ class Controller extends GetxController {
       user.value.birthday = DateFormat('dd-MM-yyyy').parse(birthdayAsString);
     }
 
-    final weightChangeList = userMap['weightChanges'];
     user.value.weightChanges = [];
-    for (final weightMap in weightChangeList) {
-      user.value.weightChanges!.add(WeightChange(
+    for (final weightMap in userMap['weightChanges']) {
+      WeightChange weightChange = WeightChange(
           time: DateFormat('dd-MM-yyyy').parse(weightMap['time']),
           weight: weightMap['weight'],
-          bmi: weightMap['bmi']));
+          bmi: weightMap['bmi']);
+
+      if (user.value.weightChanges == null) {
+        user.value.weightChanges = [weightChange];
+      } else {
+        user.value.weightChanges!.add(weightChange);
+      }
     }
 
     user.value.id = userMap['userid'] ?? 0;

@@ -16,7 +16,7 @@ class WeightChange {
   }
 
   void calculateBMI(double height) {
-    bmi = roundDouble((weight! / (height * height) * 100), 4);
+    bmi = roundDouble((weight! / (height * height) * 100), 2);
   }
 
   Map<String, dynamic> toJson() {
@@ -114,19 +114,23 @@ class User {
     return {"min": idealBmiMin, "max": idealBmiMax};
   }
 
+  List<Map<String, dynamic>> weightChangesToJson() {
+    if (weightChanges != null) {
+      return weightChanges!.map((e) => e.toJson()).toList();
+    } else {
+      return [];
+    }
+  }
+
   Map<String, dynamic> toJson() {
     String formattedBirthday = DateFormat('dd-MM-yyyy').format(birthday!);
-    List<Map<String, dynamic>>? weightChangesToJson;
-    if (weightChanges != null) {
-      weightChangesToJson = weightChanges!.map((e) => e.toJson()).toList();
-    }
     return {
       "userId": id,
       "name": name,
       "gender": gender == Gender.male ? 'male' : 'female',
       "birthday": formattedBirthday,
       "height": height,
-      "weightChanges": weightChangesToJson ?? [],
+      "weightChanges": weightChangesToJson(),
       "fitnesslevel": fitnesslevel,
       "age": age,
       "bmi": bmi,
