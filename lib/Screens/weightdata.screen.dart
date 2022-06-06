@@ -3,7 +3,7 @@ import "package:flutter/material.dart";
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
-
+import "dart:math";
 import '../models/user_controller.dart';
 import '../templates/input.dart';
 import '../templates/menu.drawer.dart';
@@ -29,6 +29,59 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
 
   List<WeightChange> weights = [];
   List<WeightChange> weightsDisplay = [];
+  late Map<String, double> idealBMI;
+
+  static const int countweightDataShowOnDisplay = 2;
+
+  Map<String, double> calculateIdealBMI(int age, Gender gender) {
+    double idealBmiMin = 0.0;
+    double idealBmiMax = 0.0;
+    if (gender == Gender.male) {
+      if (age <= 16) {
+        idealBmiMin = 19;
+        idealBmiMax = 24;
+      } else if (age <= 18) {
+        idealBmiMin = 20;
+        idealBmiMax = 25;
+      } else if (age <= 24) {
+        idealBmiMin = 21;
+        idealBmiMax = 26;
+      } else if (age <= 34) {
+        idealBmiMin = 22;
+        idealBmiMax = 27;
+      } else if (age <= 54) {
+        idealBmiMin = 23;
+        idealBmiMax = 28;
+      } else if (age <= 64) {
+        idealBmiMin = 24;
+        idealBmiMax = 29;
+      } else {
+        idealBmiMin = 25;
+        idealBmiMax = 30;
+      }
+    } else {
+      if (age <= 24) {
+        idealBmiMin = 19;
+        idealBmiMax = 24;
+      } else if (age <= 34) {
+        idealBmiMin = 20;
+        idealBmiMax = 25;
+      } else if (age <= 44) {
+        idealBmiMin = 21;
+        idealBmiMax = 26;
+      } else if (age <= 54) {
+        idealBmiMin = 22;
+        idealBmiMax = 27;
+      } else if (age <= 64) {
+        idealBmiMin = 23;
+        idealBmiMax = 28;
+      } else {
+        idealBmiMin = 25;
+        idealBmiMax = 30;
+      }
+    }
+    return {"min": idealBmiMin, "max": idealBmiMax};
+  }
 
   setSublistDisplay() {
     weightsDisplay = weights.sublist(1, 2);
@@ -38,6 +91,7 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
   void initState() {
     if (c.user.value.weightChanges != null) {
       weights = c.user.value.weightChanges!;
+      idealBMI = calculateIdealBMI(c.user.value.age, c.user.value.gender!);
     }
     super.initState();
   }
@@ -85,8 +139,6 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
                                       .lastWhere(
                                           (element) => element.bmi == null)
                                       .calculateBMI(c.user.value.height!);
-
-                                  weightsDisplay = setSublistDisplay();
                                 });
 
                                 c.user.value.weightChanges = weights;
@@ -110,22 +162,23 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
                         color: AppColors.cardColor,
                         child: Column(
                           children: [
-                            listViewWeights(2),
-                            const Divider(color: AppColors.text),
-                            if (weights.length > 2)
+                            listViewWeights(countweightDataShowOnDisplay),
+                            if (weights.length > countweightDataShowOnDisplay)
+                              const Divider(color: AppColors.text),
+                            if (weights.length > countweightDataShowOnDisplay)
                               TextButton(
                                 child: const Text('Mehr anzeigen',
                                     style: TextStyle(color: AppColors.text)),
                                 onPressed: () {
                                   showModalBottomSheet(
                                     context: context,
+                                    isScrollControlled: true,
                                     backgroundColor: Colors.transparent,
                                     shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(14.0),
+                                        top: Radius.circular(AppBorders.radius),
                                       ),
                                     ),
-                                    //isScrollControlled: true,
                                     builder: (BuildContext context) {
                                       return Container(
                                         decoration: BoxDecoration(
@@ -133,8 +186,10 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
                                           border: Border.all(
                                               color: AppColors.background),
                                           borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(14),
-                                            topRight: Radius.circular(14),
+                                            topLeft: Radius.circular(
+                                                AppBorders.radius),
+                                            topRight: Radius.circular(
+                                                AppBorders.radius),
                                           ),
                                         ),
                                         child: Column(
@@ -169,11 +224,19 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
                       child: SfCartesianChart(
                         title: ChartTitle(
                             text: "BMI",
-                            textStyle: TextStyle(color: AppColors.text)),
+                            textStyle: const TextStyle(color: AppColors.text)),
                         primaryXAxis: CategoryAxis(
                           labelStyle: const TextStyle(color: AppColors.text),
                         ),
                         primaryYAxis: NumericAxis(
+                          plotBands: [
+                            PlotBand(
+                                shouldRenderAboveSeries: false,
+                                start: idealBMI['min'] ?? 0.0,
+                                end: idealBMI['max'] ?? 0.0,
+                                color: Colors.grey,
+                                opacity: 0.3)
+                          ],
                           labelStyle: const TextStyle(color: AppColors.text),
                         ),
                         series: <ChartSeries>[
@@ -206,7 +269,7 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
       //physics: const NeverScrollableScrollPhysics(),
       physics: const ScrollPhysics(),
       shrinkWrap: true,
-      itemCount: itemCount,
+      itemCount: min(weights.length, itemCount),
       itemBuilder: (BuildContext context, int index) {
         final weightData = weights.elementAt(index);
         return Dismissible(
@@ -273,6 +336,9 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
                                     weights.elementAt(index).weight =
                                         double.parse(
                                             weightChangeController.text);
+                                    weights
+                                        .elementAt(index)
+                                        .calculateBMI(c.user.value.height!);
                                     Navigator.of(context).pop();
                                     setState(() {
                                       ScaffoldMessenger.of(context)

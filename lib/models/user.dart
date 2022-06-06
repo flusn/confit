@@ -10,13 +10,9 @@ class WeightChange {
 
   WeightChange({this.time, this.weight, this.bmi});
 
-  double roundDouble(double value, int places) {
-    num mod = pow(10.0, places);
-    return ((value * mod).round().toDouble() / mod);
-  }
-
   void calculateBMI(double height) {
-    bmi = roundDouble((weight! / (height * height) * 100), 2);
+    bmi =
+        double.parse((weight! / (height * height) * 10000).toStringAsFixed(2));
   }
 
   Map<String, dynamic> toJson() {
@@ -62,56 +58,6 @@ class User {
         age--;
       }
     }
-  }
-
-  Map<String, double> calculateIdealBMI(int age, Gender gender) {
-    double idealBmiMin = 0.0;
-    double idealBmiMax = 0.0;
-    if (gender == Gender.male) {
-      if (age <= 16) {
-        idealBmiMin = 19;
-        idealBmiMax = 24;
-      } else if (age <= 18) {
-        idealBmiMin = 20;
-        idealBmiMax = 25;
-      } else if (age <= 24) {
-        idealBmiMin = 21;
-        idealBmiMax = 26;
-      } else if (age <= 34) {
-        idealBmiMin = 22;
-        idealBmiMax = 27;
-      } else if (age <= 54) {
-        idealBmiMin = 23;
-        idealBmiMax = 28;
-      } else if (age <= 64) {
-        idealBmiMin = 24;
-        idealBmiMax = 29;
-      } else {
-        idealBmiMin = 25;
-        idealBmiMax = 30;
-      }
-    } else {
-      if (age <= 24) {
-        idealBmiMin = 19;
-        idealBmiMax = 24;
-      } else if (age <= 34) {
-        idealBmiMin = 20;
-        idealBmiMax = 25;
-      } else if (age <= 44) {
-        idealBmiMin = 21;
-        idealBmiMax = 26;
-      } else if (age <= 54) {
-        idealBmiMin = 22;
-        idealBmiMax = 27;
-      } else if (age <= 64) {
-        idealBmiMin = 23;
-        idealBmiMax = 28;
-      } else {
-        idealBmiMin = 25;
-        idealBmiMax = 30;
-      }
-    }
-    return {"min": idealBmiMin, "max": idealBmiMax};
   }
 
   List<Map<String, dynamic>> weightChangesToJson() {
