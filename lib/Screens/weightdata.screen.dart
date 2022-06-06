@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import "dart:math";
+import '../models/profil_image.dart';
 import '../models/user_controller.dart';
 import '../templates/input.dart';
 import '../templates/menu.drawer.dart';
@@ -101,7 +102,14 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
-            title: const Text("Gewichtsänderungen"),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: const [
+                Text("Gewichtsänderungen"),
+                ProfilImageInAppBar(),
+              ],
+            ),
           ),
           drawer: const MenuDrawer(),
           body: SingleChildScrollView(
@@ -231,10 +239,12 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
                         primaryYAxis: NumericAxis(
                           plotBands: [
                             PlotBand(
+                                borderWidth: 1,
+                                borderColor: AppColors.background,
                                 shouldRenderAboveSeries: false,
                                 start: idealBMI['min'] ?? 0.0,
                                 end: idealBMI['max'] ?? 0.0,
-                                color: Colors.grey,
+                                color: AppColors.background,
                                 opacity: 0.3)
                           ],
                           labelStyle: const TextStyle(color: AppColors.text),

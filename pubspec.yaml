@@ -39,6 +39,8 @@ dependencies:
   get: ^4.6.5
   get_storage: ^2.0.3
   syncfusion_flutter_charts: ^20.1.57
+  image_picker: ^0.8.5+3
+  image_cropper: ^2.0.3
   
 dev_dependencies:
   flutter_test:

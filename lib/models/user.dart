@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'package:intl/intl.dart';
 
@@ -29,6 +30,8 @@ class User {
   int? id;
   String? name;
   Gender? gender;
+  File? image;
+  String? imagePath;
   DateTime? birthday;
   List<WeightChange>? weightChanges;
   double? height;
@@ -38,14 +41,17 @@ class User {
   double bmi = 0.0;
   int points = 0;
 
-  User(
-      {this.id,
-      this.name,
-      this.gender,
-      this.birthday,
-      this.weightChanges,
-      this.height,
-      this.fitnesslevel});
+  User({
+    this.id,
+    this.name,
+    this.image,
+    this.imagePath,
+    this.gender,
+    this.birthday,
+    this.weightChanges,
+    this.height,
+    this.fitnesslevel,
+  });
 
   void calculateAge() {
     DateTime today = DateTime.now();
@@ -73,6 +79,7 @@ class User {
     return {
       "userId": id,
       "name": name,
+      "imagePath": imagePath,
       "gender": gender == Gender.male ? 'male' : 'female',
       "birthday": formattedBirthday,
       "height": height,

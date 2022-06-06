@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'user.dart';
@@ -43,6 +45,12 @@ class Controller extends GetxController {
 
     user.value.id = userMap['userid'] ?? 0;
     user.value.name = userMap['name'] ?? '';
+    user.value.imagePath = userMap['imagePath'] ?? '';
+
+    if (user.value.imagePath != null && user.value.imagePath != '') {
+      user.value.image = File(user.value.imagePath!);
+    }
+
     user.value.gender =
         userMap['gender'] == 'male' ? Gender.male : Gender.female;
     //user.value.weightChanges = userMap['weightChanges'].map((e) => e.toJson()).toList() ?? [];

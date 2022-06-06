@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import "package:flutter/material.dart";
+import 'package:image_picker/image_picker.dart';
+import '../models/profil_image.dart';
 import '../models/user.dart';
 import '../models/user_controller.dart';
 import "../themes/themes.dart";
@@ -24,6 +28,11 @@ class _BasedataScreenState extends State<BasedataScreen> {
 
   bool userdatafistInput = true;
   final nameController = TextEditingController();
+  File? _image;
+  String? _imagePath;
+  final picker = ImagePicker();
+
+  String? networkImg;
   Gender? genderController;
   final dayController = TextEditingController();
   final monthController = TextEditingController();
@@ -40,12 +49,53 @@ class _BasedataScreenState extends State<BasedataScreen> {
 
   String fitnesslevel = "gar nicht";
 
+  Future selectOrTakePhoto(ImageSource imageSource) async {
+    final pickedFile = await picker.pickImage(source: imageSource);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        _imagePath = pickedFile.path;
+      } else
+        print('No photo was selected or taken');
+    });
+  }
+
+  Future _showSelectionDialog() async {
+    await showDialog(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: const Text('Wähle ein Foto'),
+        children: <Widget>[
+          SimpleDialogOption(
+            child: Text('Aus Gallerie'),
+            onPressed: () {
+              selectOrTakePhoto(ImageSource.gallery);
+              Navigator.pop(context);
+            },
+          ),
+          SimpleDialogOption(
+            child: Text('Mach ein Foto'),
+            onPressed: () {
+              selectOrTakePhoto(ImageSource.camera);
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
+    );
+  }
+
   //Wurde der Benutzer bereits angelegt, werden die Stammdaten aus dem Storage geladen
   @override
   void initState() {
     if (c.user.value.name != null) {
       userdatafistInput = false;
       nameController.text = c.user.value.name.toString();
+    }
+    if (c.user.value.image != null) {
+      userdatafistInput = false;
+      _image = c.user.value.image;
     }
     if (c.user.value.gender != null) {
       genderController = c.user.value.gender;
@@ -87,6 +137,15 @@ class _BasedataScreenState extends State<BasedataScreen> {
                     style: const TextStyle(color: AppColors.text),
                     decoration:
                         inputfieldDecoration("Name", "Gib deinen Namen an"),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _showSelectionDialog();
+                  }, //Replace
+                  child: ProfilImage(
+                    image: _image,
+                    showInAppBar: false,
                   ),
                 ),
                 Row(
@@ -329,6 +388,8 @@ class _BasedataScreenState extends State<BasedataScreen> {
                         c.user.value = User(
                           id: c.currentUserId.value,
                           name: nameController.text,
+                          image: _image,
+                          imagePath: _imagePath,
                           gender: genderController,
                           birthday: DateTime(
                               int.parse(yearController.text),
@@ -354,12 +415,6 @@ class _BasedataScreenState extends State<BasedataScreen> {
                         await userstorage.write(
                             c.currentUserId.value.toString(), userAsNormalMap);
 
-                        /*                        
-                        await userstorage.write('users',
-                          c.users.entries.map((e) => e.value.toJson()));*/
-                        //await userstorage.write('users', 1);
-
-                        //c.users.entries.map((e) => e.value.toJson()));
                         Get.to(() => const HomeScreen());
                       }
                     }

@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 
+import '../models/profil_image.dart';
 import '../templates/menu.drawer.dart';
 
 class ShopScreen extends StatelessWidget {
@@ -9,7 +10,16 @@ class ShopScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const MenuDrawer(),
-      appBar: AppBar(title: const Text("Shop")),
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: const [
+            Text("Shop"),
+            ProfilImageInAppBar(),
+          ],
+        ),
+      ),
     );
   }
 }
