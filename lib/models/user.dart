@@ -1,25 +1,57 @@
+import 'dart:io';
 import 'dart:math';
+import 'package:intl/intl.dart';
+
+enum Gender { male, female }
+
+class WeightChange {
+  DateTime? time;
+  double? weight;
+  double? bmi;
+
+  WeightChange({this.time, this.weight, this.bmi});
+
+  void calculateBMI(double height) {
+    bmi =
+        double.parse((weight! / (height * height) * 10000).toStringAsFixed(2));
+  }
+
+  Map<String, dynamic> toJson() {
+    String formattedtime = DateFormat('dd-MM-yyyy').format(time!);
+    return {
+      "time": formattedtime,
+      "weight": weight,
+      "bmi": bmi,
+    };
+  }
+}
 
 class User {
-  final int id = 0;
-  final String? name;
-  final int? gender;
-  final DateTime? birthday;
-  final double? weight;
-  final double? height;
-  final int? fitnesslevel;
+  int? id;
+  String? name;
+  Gender? gender;
+  File? image;
+  String? imagePath;
+  DateTime? birthday;
+  List<WeightChange>? weightChanges;
+  double? height;
+  int? fitnesslevel;
 
   int age = 0;
   double bmi = 0.0;
   int points = 0;
 
-  User(
-      {this.name,
-      this.gender,
-      this.birthday,
-      this.weight,
-      this.height,
-      this.fitnesslevel});
+  User({
+    this.id,
+    this.name,
+    this.image,
+    this.imagePath,
+    this.gender,
+    this.birthday,
+    this.weightChanges,
+    this.height,
+    this.fitnesslevel,
+  });
 
   void calculateAge() {
     DateTime today = DateTime.now();
@@ -34,12 +66,28 @@ class User {
     }
   }
 
-  double roundDouble(double value, int places) {
-    num mod = pow(10.0, places);
-    return ((value * mod).round().toDouble() / mod);
+  List<Map<String, dynamic>> weightChangesToJson() {
+    if (weightChanges != null) {
+      return weightChanges!.map((e) => e.toJson()).toList();
+    } else {
+      return [];
+    }
   }
 
-  void calculateBMI() {
-    bmi = roundDouble((weight! / (height! * height!) * 100), 4);
+  Map<String, dynamic> toJson() {
+    String formattedBirthday = DateFormat('dd-MM-yyyy').format(birthday!);
+    return {
+      "userId": id,
+      "name": name,
+      "imagePath": imagePath,
+      "gender": gender == Gender.male ? 'male' : 'female',
+      "birthday": formattedBirthday,
+      "height": height,
+      "weightChanges": weightChangesToJson(),
+      "fitnesslevel": fitnesslevel,
+      "age": age,
+      "bmi": bmi,
+      "points": points
+    };
   }
 }

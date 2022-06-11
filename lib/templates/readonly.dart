@@ -7,7 +7,7 @@ class ReadonlyTextField extends StatelessWidget {
       : super(key: key);
 
   final String title;
-  final String value;
+  final value;
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +24,10 @@ class ReadonlyTextField extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: TextStyle(color: AppColors.text),
+                style: const TextStyle(color: AppColors.text),
               ),
               Text(
-                value,
+                value.toString(),
                 style: const TextStyle(color: AppColors.text),
               ),
             ],

@@ -13,4 +13,6 @@ class AppColors {
   static const Color cardColor = Colors.black54;
   static const Color cardColorOverlay = Colors.black87;
   static const Color errorMessageBox = Colors.black54;
+
+  static const Color chartline = Colors.cyan;
 }
