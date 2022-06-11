@@ -60,7 +60,7 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
         idealBmiMin = 25;
         idealBmiMax = 30;
       }
-    } else {
+    } else if (gender == Gender.female) {
       if (age <= 24) {
         idealBmiMin = 19;
         idealBmiMax = 24;
@@ -80,7 +80,11 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
         idealBmiMin = 25;
         idealBmiMax = 30;
       }
+    } else {
+      idealBmiMin = 0;
+      idealBmiMax = 0;
     }
+
     return {"min": idealBmiMin, "max": idealBmiMax};
   }
 
@@ -92,8 +96,9 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
   void initState() {
     if (c.user.value.weightChanges != null) {
       weights = c.user.value.weightChanges!;
-      idealBMI = calculateIdealBMI(c.user.value.age, c.user.value.gender!);
     }
+    idealBMI = calculateIdealBMI(c.user.value.age, c.user.value.gender!);
+
     super.initState();
   }
 

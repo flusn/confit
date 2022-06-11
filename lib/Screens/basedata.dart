@@ -32,7 +32,6 @@ class _BasedataScreenState extends State<BasedataScreen> {
   String? _imagePath;
   final picker = ImagePicker();
 
-  String? networkImg;
   Gender? genderController;
   final dayController = TextEditingController();
   final monthController = TextEditingController();
@@ -43,11 +42,10 @@ class _BasedataScreenState extends State<BasedataScreen> {
   final monthFocusNode = FocusNode();
   final yearFocusNode = FocusNode();
   final weightFocusNode = FocusNode();
-
   final heightFocusNode = FocusNode();
   final fintnesslevelFocusNode = FocusNode();
-
   String fitnesslevel = "gar nicht";
+  List<WeightChange> listWeightChanges = [];
 
   Future selectOrTakePhoto(ImageSource imageSource) async {
     final pickedFile = await picker.pickImage(source: imageSource);
@@ -96,7 +94,10 @@ class _BasedataScreenState extends State<BasedataScreen> {
     if (c.user.value.image != null) {
       userdatafistInput = false;
       _image = c.user.value.image;
+      _imagePath = c.user.value.imagePath;
     }
+    listWeightChanges = c.user.value.weightChanges ?? [];
+
     if (c.user.value.gender != null) {
       genderController = c.user.value.gender;
       userdatafistInput = false;
@@ -389,6 +390,7 @@ class _BasedataScreenState extends State<BasedataScreen> {
                           id: c.currentUserId.value,
                           name: nameController.text,
                           image: _image,
+                          weightChanges: listWeightChanges,
                           imagePath: _imagePath,
                           gender: genderController,
                           birthday: DateTime(
@@ -398,12 +400,12 @@ class _BasedataScreenState extends State<BasedataScreen> {
                           height: double.parse(heightController.text),
                         );
                         c.user.value.calculateAge();
+                        //beim ersten durchlauf wird das Gewicht in diesem Screen erfasst und in die Liste der Gewichte übertragen
                         if (userdatafistInput) {
-                          c.user.value.weightChanges = [
-                            WeightChange(
-                                time: DateTime.now(),
-                                weight: double.parse(weightController.text))
-                          ];
+                          c.user.value.weightChanges!.add(WeightChange(
+                              time: DateTime.now(),
+                              weight: double.parse(weightController.text)));
+
                           c.user.value.weightChanges!.elementAt(0).calculateBMI(
                               double.parse(heightController.text));
                         }
