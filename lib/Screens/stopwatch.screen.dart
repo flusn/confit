@@ -59,6 +59,14 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
     return points.toInt();
   }
 
+  int getPointsSum(List<Trainingsset> trainingssets) {
+    int pointsSum = 0;
+    for (final trainingsset in trainingssets) {
+      pointsSum += trainingsset.points!;
+    }
+    return pointsSum;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,10 +133,10 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
                         minutes: minutes,
                         seconds: seconds,
                         points: getPoints(minutes: minutes, seconds: seconds)));
-
-                    c.users[c.currentUserId.value.toString()] = c.user.value;
+                    c.user.value.points =
+                        getPointsSum(c.user.value.trainingssets!);
+                    
                     final userAsNormalMap = c.user.value.toJson();
-
                     userstorage.write(
                         c.currentUserId.value.toString(), userAsNormalMap);
 

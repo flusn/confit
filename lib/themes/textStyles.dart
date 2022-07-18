@@ -10,6 +10,7 @@ class AppPaddings {
 
 class AppFontSizes {
   static const double inputHeader1 = 20;
+  static const double shopItems = 16;
   static const double inputHintText = 10;
   static const double stopWatch = 80;
 }

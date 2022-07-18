@@ -3,7 +3,6 @@ import 'package:confit/models/user_controller.dart';
 import 'package:confit/themes/colors.dart';
 import "package:flutter/material.dart";
 import 'package:get/get.dart';
-
 import '../Screens/screens.dart';
 
 class ProfilImage extends StatelessWidget {
@@ -45,62 +44,68 @@ class _ProfilImageInAppBarState extends State<ProfilImageInAppBar> {
   @override
   Widget build(BuildContext context) {
     Controller c = Get.find();
-    return Ink(
-      child: InkWell(
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) => SimpleDialog(
-              title: const Text(
-                'Menü',
-                style: TextStyle(color: AppColors.text),
-              ),
-              backgroundColor: AppColors.cardColor,
-              children: <Widget>[
-                SimpleDialogOption(
-                  child: const Text(
-                    'Profil bearbeiten',
+    return Row(
+      children: [
+        Text('Punkte: ${c.user.value.points}'),
+        const SizedBox(width: 20),
+        Ink(
+          child: InkWell(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => SimpleDialog(
+                  title: const Text(
+                    'Menü',
                     style: TextStyle(color: AppColors.text),
                   ),
-                  onPressed: () {
-                    setState(() {
-                      Get.to(() => const BasedataScreen());
-                    });
+                  backgroundColor: AppColors.cardColor,
+                  children: <Widget>[
+                    SimpleDialogOption(
+                      child: const Text(
+                        'Profil bearbeiten',
+                        style: TextStyle(color: AppColors.text),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          Get.to(() => const BasedataScreen());
+                        });
 
-                    //Navigator.pop(context);
-                  },
+                        //Navigator.pop(context);
+                      },
+                    ),
+                    SimpleDialogOption(
+                      child: const Text(
+                        'Abmelden',
+                        style: TextStyle(color: AppColors.text),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          Get.to(() => const LoginScreen());
+                        });
+                      },
+                    ),
+                    SimpleDialogOption(
+                      child: const Text(
+                        'Abbrechen',
+                        style: TextStyle(color: AppColors.text),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          Navigator.pop(context);
+                        });
+                      },
+                    )
+                  ],
                 ),
-                SimpleDialogOption(
-                  child: const Text(
-                    'Abmelden',
-                    style: TextStyle(color: AppColors.text),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      Get.to(() => const LoginScreen());
-                    });
-                  },
-                ),
-                SimpleDialogOption(
-                  child: const Text(
-                    'Abbrechen',
-                    style: TextStyle(color: AppColors.text),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      Navigator.pop(context);
-                    });
-                  },
-                )
-              ],
+              );
+            },
+            child: ProfilImage(
+              image: c.user.value.image,
+              showInAppBar: true,
             ),
-          );
-        },
-        child: ProfilImage(
-          image: c.user.value.image,
-          showInAppBar: true,
+          ),
         ),
-      ),
+      ],
     );
   }
 }

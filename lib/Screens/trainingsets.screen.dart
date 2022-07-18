@@ -92,10 +92,8 @@ class _TrainingsetsScreenState extends State<TrainingsetsScreen> {
                       shrinkWrap: true,
                       itemCount: _trainingssets.length,
                       itemBuilder: (BuildContext context, int index) {
-                        final trainingssetsSorted =
-                            _trainingssets.reversed.toList();
                         final trainingsset =
-                            trainingssetsSorted.elementAt(index);
+                            _trainingssets.reversed.toList().elementAt(index);
                         return Column(
                           children: [
                             Row(
