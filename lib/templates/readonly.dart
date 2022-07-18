@@ -7,7 +7,7 @@ class ReadonlyTextField extends StatelessWidget {
       : super(key: key);
 
   final String title;
-  final value;
+  final String value;
 
   @override
   Widget build(BuildContext context) {

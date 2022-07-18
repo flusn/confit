@@ -1,6 +1,7 @@
 import 'dart:io';
-import 'dart:math';
 import 'package:intl/intl.dart';
+
+import '../Screens/stopwatch.screen.dart';
 
 enum Gender { male, female }
 
@@ -34,6 +35,7 @@ class User {
   String? imagePath;
   DateTime? birthday;
   List<WeightChange>? weightChanges;
+  List<Trainingsset>? trainingssets;
   double? height;
   int? fitnesslevel;
 
@@ -48,6 +50,7 @@ class User {
     this.imagePath,
     this.gender,
     this.birthday,
+    this.trainingssets,
     this.weightChanges,
     this.height,
     this.fitnesslevel,
@@ -74,6 +77,14 @@ class User {
     }
   }
 
+  List<Map<String, dynamic>> trainingssetsToJson() {
+    if (trainingssets != null) {
+      return trainingssets!.map((e) => e.toJson()).toList();
+    } else {
+      return [];
+    }
+  }
+
   Map<String, dynamic> toJson() {
     String formattedBirthday = DateFormat('dd-MM-yyyy').format(birthday!);
     return {
@@ -84,6 +95,7 @@ class User {
       "birthday": formattedBirthday,
       "height": height,
       "weightChanges": weightChangesToJson(),
+      "trainingssets": trainingssetsToJson(),
       "fitnesslevel": fitnesslevel,
       "age": age,
       "bmi": bmi,

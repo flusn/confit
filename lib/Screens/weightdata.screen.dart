@@ -139,7 +139,7 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
                           style: ElevatedButton.styleFrom(
                               primary: AppColors.button,
                               textStyle: const TextStyle(
-                                  fontSize: AppFontSizes.fontSizeInputHeader1)),
+                                  fontSize: AppFontSizes.inputHeader1)),
                           onPressed: () {
                             if (_formKey.currentState != null) {
                               if (_formKey.currentState!.validate()) {
@@ -178,7 +178,7 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
                             listViewWeights(countweightDataShowOnDisplay),
                             if (weights.length > countweightDataShowOnDisplay)
                               const Divider(color: AppColors.text),
-                            if (weights.length > countweightDataShowOnDisplay)
+                            if (weights.length > countweightDataShowOnDisplay)                              
                               TextButton(
                                 child: const Text('Mehr anzeigen',
                                     style: TextStyle(color: AppColors.text)),
@@ -311,7 +311,7 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
           ),
           key: UniqueKey(),
           onDismissed: (direction) {
-            bool canceled = false;
+            
             String formattedtimestamp =
                 DateFormat('dd-MM-yyyy').format(weightData.time!);
             setState(() {
@@ -339,8 +339,7 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
                                       style: TextStyle(
                                           color: AppColors.background)),
                                   onPressed: () {
-                                    Navigator.of(context).pop();
-                                    canceled = true;
+                                    Navigator.of(context).pop();                                    
                                   },
                                 ),
                                 TextButton(

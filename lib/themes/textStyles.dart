@@ -9,8 +9,9 @@ class AppPaddings {
 }
 
 class AppFontSizes {
-  static const double fontSizeInputHeader1 = 20;
-  static const double fontSizeInputHintText = 10;
+  static const double inputHeader1 = 20;
+  static const double inputHintText = 10;
+  static const double stopWatch = 80;
 }
 
 class AppBorders {

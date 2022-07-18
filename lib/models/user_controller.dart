@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:confit/Screens/stopwatch.screen.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'user.dart';
@@ -20,6 +21,7 @@ class Controller extends GetxController {
     user.value.name = userStorage.name;
     user.value.points = userStorage.points;
     user.value.weightChanges = userStorage.weightChanges;
+    user.value.trainingssets = userStorage.trainingssets;
   }
 
   setUserFromStorage(Map<String, dynamic> userMap) {
@@ -43,6 +45,23 @@ class Controller extends GetxController {
       }
     }
 
+    if (userMap['trainingssets'] != null) {
+      user.value.trainingssets = [];
+      for (final trainingMap in userMap['trainingssets']) {
+        Trainingsset trainingsset = Trainingsset(
+            time: DateFormat('dd-MM-yyyy').parse(trainingMap['time']),
+            minutes: trainingMap['minutes'],
+            seconds: trainingMap['seconds'],
+            points: trainingMap['points']);
+
+        if (user.value.trainingssets == null) {
+          user.value.trainingssets = [trainingsset];
+        } else {
+          user.value.trainingssets!.add(trainingsset);
+        }
+      }
+    }
+
     user.value.id = userMap['userid'] ?? 0;
     user.value.name = userMap['name'] ?? '';
     user.value.imagePath = userMap['imagePath'] ?? '';
@@ -53,7 +72,6 @@ class Controller extends GetxController {
 
     user.value.gender =
         userMap['gender'] == 'male' ? Gender.male : Gender.female;
-    //user.value.weightChanges = userMap['weightChanges'].map((e) => e.toJson()).toList() ?? [];
     user.value.height = userMap['height'] ?? 0.0;
     user.value.fitnesslevel = userMap['fitnesslevel'] ?? 0;
     user.value.age = userMap['age'] ?? 0;

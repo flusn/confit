@@ -161,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: ElevatedButton.styleFrom(
                           primary: AppColors.button,
                           textStyle: const TextStyle(
-                              fontSize: AppFontSizes.fontSizeInputHeader1),
+                              fontSize: AppFontSizes.inputHeader1),
                         ),
                         onPressed: () {
                           if (_formKey.currentState != null) {

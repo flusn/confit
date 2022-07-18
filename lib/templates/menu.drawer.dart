@@ -26,7 +26,7 @@ class MenuDrawer extends StatelessWidget {
       "Home",
       "Stammdaten",
       "Gewichtsanpassungen",
-      "Trainingssets",
+      "Training",
       "Shop",
       "Rangliste"
     ];
@@ -51,7 +51,7 @@ class MenuDrawer extends StatelessWidget {
               case "Gewichtsanpassungen":
                 screen = const WeightdataScreen();
                 break;
-              case "Trainingssets":
+              case "Training":
                 screen = const TrainingsetsScreen();
                 break;
               case "Shop":

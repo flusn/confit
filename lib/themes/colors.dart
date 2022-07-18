@@ -15,4 +15,8 @@ class AppColors {
   static const Color errorMessageBox = Colors.black54;
 
   static const Color chartline = Colors.cyan;
+
+  static const Color startButton = Colors.green;
+  static const Color stopButton = Colors.red;
+  static const Color finishButton = Colors.white;
 }

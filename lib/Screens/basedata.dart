@@ -50,13 +50,14 @@ class _BasedataScreenState extends State<BasedataScreen> {
   Future selectOrTakePhoto(ImageSource imageSource) async {
     final pickedFile = await picker.pickImage(source: imageSource);
 
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-        _imagePath = pickedFile.path;
-      } else
-        print('No photo was selected or taken');
-    });
+    setState(
+      () {
+        if (pickedFile != null) {
+          _image = File(pickedFile.path);
+          _imagePath = pickedFile.path;
+        }
+      },
+    );
   }
 
   Future _showSelectionDialog() async {
@@ -66,14 +67,14 @@ class _BasedataScreenState extends State<BasedataScreen> {
         title: const Text('Wähle ein Foto'),
         children: <Widget>[
           SimpleDialogOption(
-            child: Text('Aus Gallerie'),
+            child: const Text('Aus Gallerie'),
             onPressed: () {
               selectOrTakePhoto(ImageSource.gallery);
               Navigator.pop(context);
             },
           ),
           SimpleDialogOption(
-            child: Text('Mach ein Foto'),
+            child: const Text('Mach ein Foto'),
             onPressed: () {
               selectOrTakePhoto(ImageSource.camera);
               Navigator.pop(context);
@@ -381,8 +382,8 @@ class _BasedataScreenState extends State<BasedataScreen> {
                   child: const Text("Speichern"),
                   style: ElevatedButton.styleFrom(
                       primary: AppColors.button,
-                      textStyle: const TextStyle(
-                          fontSize: AppFontSizes.fontSizeInputHeader1)),
+                      textStyle:
+                          const TextStyle(fontSize: AppFontSizes.inputHeader1)),
                   onPressed: () async {
                     if (_formKey.currentState != null) {
                       if (_formKey.currentState!.validate()) {
