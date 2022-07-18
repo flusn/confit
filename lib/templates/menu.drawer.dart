@@ -55,7 +55,7 @@ class MenuDrawer extends StatelessWidget {
                 screen = const TrainingsetsScreen();
                 break;
               case "Shop":
-                screen = ShopScreen();
+                screen = const ShopScreen();
                 break;
               case "Rangliste":
                 screen = const RankingScreen();

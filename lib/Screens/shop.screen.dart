@@ -18,7 +18,7 @@ class ShopItem {
 }
 
 class ShopScreen extends StatefulWidget {
-  ShopScreen({Key? key}) : super(key: key);
+  const ShopScreen({Key? key}) : super(key: key);
 
   @override
   State<ShopScreen> createState() => _ShopScreenState();
