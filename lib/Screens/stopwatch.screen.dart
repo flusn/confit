@@ -16,14 +16,9 @@ class Trainingsset {
   int? minutes;
   int? seconds;
   int? points;
+  double? km;
 
-  Trainingsset({this.time, this.minutes, this.seconds, this.points});
-
-  startTraining() {
-    time = DateTime.now();
-  }
-
-  endTraining() {}
+  Trainingsset({this.time, this.minutes, this.seconds, this.points, this.km});
 
   Map<String, dynamic> toJson() {
     String formattedtime = DateFormat('dd-MM-yyyy').format(time!);
@@ -32,6 +27,7 @@ class Trainingsset {
       "minutes": minutes,
       "seconds": seconds,
       "points": points,
+      "km": km,
     };
   }
 }
@@ -55,8 +51,16 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
   }
 
   int getPoints({required int minutes, required int seconds}) {
-    double points = (minutes * 60 + seconds) / 6;
+    double points = seconds / 6;
     return points.toInt();
+  }
+
+  double getkm(int minutes) {
+    double km = 0.0;
+    if (minutes != 0) {
+      km = minutes / 60 * 12;
+    }
+    return km;
   }
 
   int getPointsSum(List<Trainingsset> trainingssets) {
@@ -65,6 +69,16 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
       pointsSum += trainingsset.points!;
     }
     return pointsSum;
+  }
+
+  double getkmSum(List<Trainingsset> trainingssets) {
+    double km = 0;
+    for (final trainingsset in trainingssets) {
+      if (trainingsset.minutes != null && trainingsset.minutes! > 0) {
+        km = trainingsset.minutes! / 60 * 12;
+      }
+    }
+    return km;
   }
 
   @override
@@ -132,10 +146,13 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
                         time: DateTime.now(),
                         minutes: minutes,
                         seconds: seconds,
+                        km: getkm(minutes),
                         points: getPoints(minutes: minutes, seconds: seconds)));
+
                     c.user.value.points =
                         getPointsSum(c.user.value.trainingssets!);
-                    
+                    c.user.value.km = getkmSum(c.user.value.trainingssets!);
+
                     final userAsNormalMap = c.user.value.toJson();
                     userstorage.write(
                         c.currentUserId.value.toString(), userAsNormalMap);

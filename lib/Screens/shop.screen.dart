@@ -34,7 +34,8 @@ class _ShopScreenState extends State<ShopScreen> {
     ShopItem(text: '100€ MyMagenta Shop Gutschein', points: 50000),
     ShopItem(text: '250€ Gutschein', points: 100000, count: 4),
     ShopItem(text: 'Heimkinoanlage', points: 250000, count: 3),
-    ShopItem(text: 'Heimkinoanlage', points: 500000, count: 2),
+    ShopItem(
+        text: '1 Jahr alle Telekomverträge umsonst', points: 500000, count: 2),
   ];
 
   @override
@@ -73,11 +74,13 @@ class _ShopScreenState extends State<ShopScreen> {
                 userstorage.write(
                     c.currentUserId.value.toString(), userAsNormalMap);
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    backgroundColor: AppColors.startButton,
                     content:
                         Text('${shopItems.elementAt(index).text} gekauft')));
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('Nicht möglich, du hast wenig Punkte!')));
+                    backgroundColor: AppColors.stopButton,
+                    content: Text('Nicht möglich, du hast zu wenig Punkte!')));
               }
             },
             child: Ink(

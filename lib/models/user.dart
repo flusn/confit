@@ -42,6 +42,7 @@ class User {
   int age = 0;
   double bmi = 0.0;
   int points = 0;
+  double km = 0.0;
 
   User({
     this.id,
@@ -53,7 +54,7 @@ class User {
     this.trainingssets,
     this.weightChanges,
     this.height,
-    this.fitnesslevel,
+    this.fitnesslevel,    
   });
 
   void calculateAge() {
@@ -99,7 +100,8 @@ class User {
       "fitnesslevel": fitnesslevel,
       "age": age,
       "bmi": bmi,
-      "points": points
+      "points": points,
+      "km": km
     };
   }
 }

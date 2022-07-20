@@ -111,7 +111,7 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: const [
-                Text("Gewichtsänderungen"),
+                Text("Gewicht"),
                 ProfilImageInAppBar(),
               ],
             ),
@@ -178,7 +178,7 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
                             listViewWeights(countweightDataShowOnDisplay),
                             if (weights.length > countweightDataShowOnDisplay)
                               const Divider(color: AppColors.text),
-                            if (weights.length > countweightDataShowOnDisplay)                              
+                            if (weights.length > countweightDataShowOnDisplay)
                               TextButton(
                                 child: const Text('Mehr anzeigen',
                                     style: TextStyle(color: AppColors.text)),
@@ -311,7 +311,6 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
           ),
           key: UniqueKey(),
           onDismissed: (direction) {
-            
             String formattedtimestamp =
                 DateFormat('dd-MM-yyyy').format(weightData.time!);
             setState(() {
@@ -339,7 +338,7 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
                                       style: TextStyle(
                                           color: AppColors.background)),
                                   onPressed: () {
-                                    Navigator.of(context).pop();                                    
+                                    Navigator.of(context).pop();
                                   },
                                 ),
                                 TextButton(

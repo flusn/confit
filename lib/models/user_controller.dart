@@ -3,12 +3,14 @@ import 'dart:io';
 import 'package:confit/Screens/stopwatch.screen.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import '../Screens/ranking.screen.dart';
 import 'user.dart';
 
 class Controller extends GetxController {
   final users = <String, User>{}.obs;
   final user = User().obs;
   final currentUserId = 0.obs;
+  final allUserIds = [];
 
   void setUserData(User userStorage) {
     user.value.age = userStorage.age;
@@ -26,7 +28,6 @@ class Controller extends GetxController {
 
   setUserFromStorage(Map<String, dynamic> userMap) {
     String birthdayAsString = userMap['birthday'] ?? '';
-
     if (birthdayAsString != '') {
       user.value.birthday = DateFormat('dd-MM-yyyy').parse(birthdayAsString);
     }
@@ -77,5 +78,6 @@ class Controller extends GetxController {
     user.value.age = userMap['age'] ?? 0;
     user.value.bmi = userMap['bmi'] ?? 0.0;
     user.value.points = userMap['points'] ?? 0;
+    user.value.km = userMap['km'] ?? 0;
   }
 }

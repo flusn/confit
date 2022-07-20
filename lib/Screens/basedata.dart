@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:confit/Screens/stopwatch.screen.dart';
 import "package:flutter/material.dart";
 import 'package:image_picker/image_picker.dart';
 import '../models/profil_image.dart';
@@ -46,6 +47,9 @@ class _BasedataScreenState extends State<BasedataScreen> {
   final fintnesslevelFocusNode = FocusNode();
   String fitnesslevel = "gar nicht";
   List<WeightChange> listWeightChanges = [];
+  List<Trainingsset> listTrainingssets = [];
+  int points = 0;
+  double km = 0.0;
 
   Future selectOrTakePhoto(ImageSource imageSource) async {
     final pickedFile = await picker.pickImage(source: imageSource);
@@ -98,6 +102,7 @@ class _BasedataScreenState extends State<BasedataScreen> {
       _imagePath = c.user.value.imagePath;
     }
     listWeightChanges = c.user.value.weightChanges ?? [];
+    listTrainingssets = c.user.value.trainingssets ?? [];
 
     if (c.user.value.gender != null) {
       genderController = c.user.value.gender;
@@ -113,6 +118,8 @@ class _BasedataScreenState extends State<BasedataScreen> {
       heightController.text = c.user.value.height.toString();
       userdatafistInput = false;
     }
+    points = c.user.value.points;
+    km = c.user.value.km;
     super.initState();
   }
 
@@ -148,6 +155,7 @@ class _BasedataScreenState extends State<BasedataScreen> {
                   child: ProfilImage(
                     image: _image,
                     showInAppBar: false,
+                    size: 40,
                   ),
                 ),
                 Row(
@@ -392,6 +400,7 @@ class _BasedataScreenState extends State<BasedataScreen> {
                           name: nameController.text,
                           image: _image,
                           weightChanges: listWeightChanges,
+                          trainingssets: listTrainingssets,
                           imagePath: _imagePath,
                           gender: genderController,
                           birthday: DateTime(
@@ -401,6 +410,8 @@ class _BasedataScreenState extends State<BasedataScreen> {
                           height: double.parse(heightController.text),
                         );
                         c.user.value.calculateAge();
+                        c.user.value.points = points;
+                        c.user.value.km = km;
                         //beim ersten durchlauf wird das Gewicht in diesem Screen erfasst und in die Liste der Gewichte übertragen
                         if (userdatafistInput) {
                           c.user.value.weightChanges!.add(WeightChange(

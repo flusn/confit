@@ -19,4 +19,6 @@ class AppColors {
   static const Color startButton = Colors.green;
   static const Color stopButton = Colors.red;
   static const Color finishButton = Colors.white;
+
+  static const Color rankingHighlight = Colors.cyan;
 }

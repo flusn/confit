@@ -47,7 +47,9 @@ class _LoginScreenState extends State<LoginScreen> {
         await rootBundle.loadString('assets/jsonData/loginData.json');
     final loginDataJson = await json.decode(response);
     setState(() {
-      _loginData = AllLoginData(loginDataJson["users"]);
+      _loginData = AllLoginData(loginDataJson["users"]);            
+
+
     });
   }
 
@@ -60,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    readJson();
+    readJson();    
     return Scaffold(
       appBar: AppBar(
         title: const Text("ConFit: Login"),
@@ -170,6 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 userName.text,
                                 password.text,
                               );
+                              
                               loadUserStorage(c.currentUserId.value.toString());
                               if (c.user.value.name != null) {
                                 Get.to(() => const HomeScreen());

@@ -122,6 +122,22 @@ class _TrainingsetsScreenState extends State<TrainingsetsScreen> {
                                 ),
                               ],
                             ),
+                            if (trainingsset.km != null)
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    "Kilometer",
+                                    style: TextStyle(color: AppColors.text),
+                                  ),
+                                  Text(
+                                    trainingsset.km!.toStringAsFixed(2),
+                                    style:
+                                        const TextStyle(color: AppColors.text),
+                                  ),
+                                ],
+                              ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
