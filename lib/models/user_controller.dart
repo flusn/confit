@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:confit/Screens/stopwatch.screen.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import '../Screens/ranking.screen.dart';
 import 'user.dart';
 
 class Controller extends GetxController {

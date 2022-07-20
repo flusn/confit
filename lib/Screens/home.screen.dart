@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import '../models/profil_image.dart';
 import '../models/user_controller.dart';
@@ -16,11 +15,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
   final Controller c = Get.find();
-
+  @override
   Widget build(BuildContext context) {
-    double displayWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       drawer: const MenuDrawer(),
       appBar: AppBar(
@@ -49,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          Flexible(flex: 3, child: News()),
+          const Flexible(flex: 3, child: News()),
           Flexible(
               flex: 3,
               child: Container(

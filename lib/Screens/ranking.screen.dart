@@ -1,11 +1,7 @@
-import 'dart:convert';
-
 import "package:flutter/material.dart";
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-import '../models/loginData.dart';
 import '../models/profil_image.dart';
 import '../models/user_controller.dart';
 import '../templates/menu.drawer.dart';
@@ -26,8 +22,6 @@ class RankingScreen extends StatelessWidget {
 
   final userstorage = GetStorage();
   final Controller c = Get.find();
-
-  AllLoginData _loginData = AllLoginData([]);
 
   List<Ranking> getRankinglist() {
     List<Ranking> ranking = [];
