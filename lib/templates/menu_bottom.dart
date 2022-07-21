@@ -36,11 +36,11 @@ class MenuBottom extends StatelessWidget {
           backgroundColor: AppColors.background,
           showUnselectedLabels: true,
           unselectedItemColor: AppColors.icons,
-          selectedItemColor: AppColors.icons,          
+          selectedItemColor: AppColors.icons,
           items: const [
             BottomNavigationBarItem(
                 icon: Icon(
-                  Icons.adb_sharp,
+                  Icons.home,
                   color: AppColors.icons,
                 ),
                 label: "Home"),

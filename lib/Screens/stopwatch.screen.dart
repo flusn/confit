@@ -50,8 +50,11 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
     await _stopWatchTimer.dispose(); // Need to call dispose function.
   }
 
-  int getPoints({required int minutes, required int seconds}) {
-    double points = seconds / 6;
+  int getPoints({required int seconds}) {
+    double points = seconds / 6 +
+        c.user.value.age +
+        c.user.value.weightChanges!.last.weight!.toInt();
+
     return points.toInt();
   }
 
@@ -74,8 +77,8 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
   double getkmSum(List<Trainingsset> trainingssets) {
     double km = 0;
     for (final trainingsset in trainingssets) {
-      if (trainingsset.minutes != null && trainingsset.minutes! > 0) {
-        km = trainingsset.minutes! / 60 * 12;
+      if (trainingsset.km != null) {
+        km += trainingsset.km!.toInt();
       }
     }
     return km;
@@ -147,7 +150,7 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
                         minutes: minutes,
                         seconds: seconds,
                         km: getkm(minutes),
-                        points: getPoints(minutes: minutes, seconds: seconds)));
+                        points: getPoints(seconds: minutes * 60 + seconds)));
 
                     c.user.value.points =
                         getPointsSum(c.user.value.trainingssets!);
