@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import '../models/profil_image.dart';
 import '../models/user_controller.dart';
 import '../templates/menu.drawer.dart';
+import '../templates/menu_bottom.dart';
 import '../themes/colors.dart';
 import '../themes/textStyles.dart';
 import 'dart:io';
@@ -136,7 +137,8 @@ class RankingScreen extends StatelessWidget {
             ),
           ),
         ),
-      ),
+      )      ,
+      bottomNavigationBar: const MenuBottom(),
     );
   }
 }

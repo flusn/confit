@@ -21,4 +21,6 @@ class AppColors {
   static const Color finishButton = Colors.white;
 
   static const Color rankingHighlight = Colors.cyan;
+
+  static const Color icons = Colors.white;
 }

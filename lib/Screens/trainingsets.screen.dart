@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import '../models/profil_image.dart';
 import '../models/user_controller.dart';
 import '../templates/menu.drawer.dart';
+import '../templates/menu_bottom.dart';
 import '../themes/colors.dart';
 import '../themes/textStyles.dart';
 
@@ -19,6 +20,13 @@ class TrainingsetsScreen extends StatefulWidget {
 
 class _TrainingsetsScreenState extends State<TrainingsetsScreen> {
   final userstorage = GetStorage();
+  double getkm(int minutes) {
+    double km = 0.0;
+    if (minutes != 0) {
+      km = minutes / 60 * 12;
+    }
+    return km;
+  }
 
   final Controller c = Get.find();
   List<Trainingsset> _trainingssets = [];
@@ -26,17 +34,11 @@ class _TrainingsetsScreenState extends State<TrainingsetsScreen> {
   void initState() {
     if (c.user.value.trainingssets != null) {
       _trainingssets = c.user.value.trainingssets!;
+      for (final trainingsset in _trainingssets) {
+        trainingsset.km = getkm(trainingsset.minutes!);
+      }
     }
     super.initState();
-  }
-
-  List<Trainingsset> getSortedByDate(List<Trainingsset>? trainingssets) {
-    List<Trainingsset> sortedList = [];
-    if (trainingssets == null) return sortedList;
-    for (var i = trainingssets.length - 1; i >= 0; i--) {
-      sortedList.add(trainingssets.elementAt(i));
-    }
-    return sortedList;
   }
 
   @override
@@ -161,6 +163,7 @@ class _TrainingsetsScreenState extends State<TrainingsetsScreen> {
           ),
         ),
       ),
+      bottomNavigationBar: const MenuBottom(),
     );
   }
 }

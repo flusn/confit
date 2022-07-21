@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../models/profil_image.dart';
 import '../models/user_controller.dart';
 import '../templates/menu.drawer.dart';
+import '../templates/menu_bottom.dart';
 import '../themes/colors.dart';
 import '../themes/textStyles.dart';
 
@@ -16,6 +17,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final Controller c = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,12 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: Column(
-        //crossAxisAlignment: CrossAxisAlignment.,
-
         children: [
-          // Flexible(
-          //     flex: 2,
-          //     fit: FlexFit.tight,
           Flexible(
             flex: 2,
             child: Row(
@@ -47,18 +44,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const Flexible(flex: 3, child: News()),
-          Flexible(
-              flex: 3,
-              child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.background,
-                    border: Border.all(color: AppColors.background),
-                    borderRadius: const BorderRadius.all(
-                        Radius.circular(AppBorders.radius)),
-                  ),
-                  child: const SizedBox.shrink())),
         ],
       ),
+      bottomNavigationBar: const MenuBottom(),
     );
   }
 }

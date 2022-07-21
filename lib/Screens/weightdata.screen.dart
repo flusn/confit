@@ -8,6 +8,7 @@ import '../models/profil_image.dart';
 import '../models/user_controller.dart';
 import '../templates/input.dart';
 import '../templates/menu.drawer.dart';
+import '../templates/menu_bottom.dart';
 import '../themes/themes.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -106,173 +107,172 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          appBar: AppBar(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
-                Text("Gewicht"),
-                ProfilImageInAppBar(),
-              ],
-            ),
+        appBar: AppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: const [
+              Text("Gewicht"),
+              ProfilImageInAppBar(),
+            ],
           ),
-          drawer: const MenuDrawer(),
-          body: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
+        ),
+        drawer: const MenuDrawer(),
+        body: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Card(
+                  borderOnForeground: false,
+                  color: AppColors.cardColor,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(
+                            AppPaddings.paddingInputFieldsStandard),
+                        child: WeightInputField(
+                            weightController: weightController,
+                            weightFocusNode: weightFocusNode),
+                      ),
+                      ElevatedButton(
+                        child: const Text("Speichern"),
+                        style: ElevatedButton.styleFrom(
+                            primary: AppColors.button,
+                            textStyle: const TextStyle(
+                                fontSize: AppFontSizes.inputHeader1)),
+                        onPressed: () {
+                          if (_formKey.currentState != null) {
+                            if (_formKey.currentState!.validate()) {
+                              setState(() {
+                                weights.add(WeightChange(
+                                  time: DateTime.now(),
+                                  weight: double.parse(weightController.text),
+                                ));
+                                weights
+                                    .lastWhere((element) => element.bmi == null)
+                                    .calculateBMI(c.user.value.height!);
+                              });
+
+                              c.user.value.weightChanges = weights;
+                              final userAsNormalMap = c.user.value.toJson();
+                              userstorage.write(
+                                  c.currentUserId.value.toString(),
+                                  userAsNormalMap);
+                            }
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                          height: AppPaddings.paddingInputFieldsStandard)
+                    ],
+                  ),
+                ),
+                if (weights.isNotEmpty)
+                  SingleChildScrollView(
+                    child: Card(
+                      borderOnForeground: false,
+                      color: AppColors.cardColor,
+                      child: Column(
+                        children: [
+                          listViewWeights(countweightDataShowOnDisplay),
+                          if (weights.length > countweightDataShowOnDisplay)
+                            const Divider(color: AppColors.text),
+                          if (weights.length > countweightDataShowOnDisplay)
+                            TextButton(
+                              child: const Text('Mehr anzeigen',
+                                  style: TextStyle(color: AppColors.text)),
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(AppBorders.radius),
+                                    ),
+                                  ),
+                                  builder: (BuildContext context) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        color: AppColors.cardColorOverlay,
+                                        border: Border.all(
+                                            color: AppColors.background),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(
+                                              AppBorders.radius),
+                                          topRight: Radius.circular(
+                                              AppBorders.radius),
+                                        ),
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          const Padding(
+                                            padding: EdgeInsets.all(16.0),
+                                            child: Text('Gewichtsveränderungen',
+                                                style: TextStyle(
+                                                    color: AppColors.text,
+                                                    fontSize: 20)),
+                                          ),
+                                          listViewWeights(weights.length)
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                if (weights.length > 1)
                   Card(
                     borderOnForeground: false,
                     color: AppColors.cardColor,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(
-                              AppPaddings.paddingInputFieldsStandard),
-                          child: WeightInputField(
-                              weightController: weightController,
-                              weightFocusNode: weightFocusNode),
-                        ),
-                        ElevatedButton(
-                          child: const Text("Speichern"),
-                          style: ElevatedButton.styleFrom(
-                              primary: AppColors.button,
-                              textStyle: const TextStyle(
-                                  fontSize: AppFontSizes.inputHeader1)),
-                          onPressed: () {
-                            if (_formKey.currentState != null) {
-                              if (_formKey.currentState!.validate()) {
-                                setState(() {
-                                  weights.add(WeightChange(
-                                    time: DateTime.now(),
-                                    weight: double.parse(weightController.text),
-                                  ));
-                                  weights
-                                      .lastWhere(
-                                          (element) => element.bmi == null)
-                                      .calculateBMI(c.user.value.height!);
-                                });
-
-                                c.user.value.weightChanges = weights;
-                                final userAsNormalMap = c.user.value.toJson();
-                                userstorage.write(
-                                    c.currentUserId.value.toString(),
-                                    userAsNormalMap);
-                              }
-                            }
-                          },
-                        ),
-                        const SizedBox(
-                            height: AppPaddings.paddingInputFieldsStandard)
+                    child: SfCartesianChart(
+                      title: ChartTitle(
+                          text: "BMI",
+                          textStyle: const TextStyle(color: AppColors.text)),
+                      primaryXAxis: CategoryAxis(
+                        labelStyle: const TextStyle(color: AppColors.text),
+                      ),
+                      primaryYAxis: NumericAxis(
+                        plotBands: [
+                          PlotBand(
+                              borderWidth: 1,
+                              borderColor: AppColors.background,
+                              shouldRenderAboveSeries: false,
+                              start: idealBMI['min'] ?? 0.0,
+                              end: idealBMI['max'] ?? 0.0,
+                              color: AppColors.background,
+                              opacity: 0.3)
+                        ],
+                        labelStyle: const TextStyle(color: AppColors.text),
+                      ),
+                      series: <ChartSeries>[
+                        LineSeries<WeightChange, String>(
+                          color: AppColors.chartline,
+                          dataSource: weights,
+                          xValueMapper: (WeightChange weightdata, _) =>
+                              DateFormat('dd/MM/yyyy').format(weightdata.time!),
+                          yValueMapper: (WeightChange weightdata, _) =>
+                              weightdata.bmi,
+                          xAxisName: "Monat",
+                          yAxisName: "BMI",
+                        )
                       ],
                     ),
-                  ),
-                  if (weights.isNotEmpty)
-                    SingleChildScrollView(
-                      child: Card(
-                        borderOnForeground: false,
-                        color: AppColors.cardColor,
-                        child: Column(
-                          children: [
-                            listViewWeights(countweightDataShowOnDisplay),
-                            if (weights.length > countweightDataShowOnDisplay)
-                              const Divider(color: AppColors.text),
-                            if (weights.length > countweightDataShowOnDisplay)
-                              TextButton(
-                                child: const Text('Mehr anzeigen',
-                                    style: TextStyle(color: AppColors.text)),
-                                onPressed: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    backgroundColor: Colors.transparent,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(AppBorders.radius),
-                                      ),
-                                    ),
-                                    builder: (BuildContext context) {
-                                      return Container(
-                                        decoration: BoxDecoration(
-                                          color: AppColors.cardColorOverlay,
-                                          border: Border.all(
-                                              color: AppColors.background),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(
-                                                AppBorders.radius),
-                                            topRight: Radius.circular(
-                                                AppBorders.radius),
-                                          ),
-                                        ),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            const Padding(
-                                              padding: EdgeInsets.all(16.0),
-                                              child: Text(
-                                                  'Gewichtsveränderungen',
-                                                  style: TextStyle(
-                                                      color: AppColors.text,
-                                                      fontSize: 20)),
-                                            ),
-                                            listViewWeights(weights.length)
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  if (weights.length > 1)
-                    Card(
-                      borderOnForeground: false,
-                      color: AppColors.cardColor,
-                      child: SfCartesianChart(
-                        title: ChartTitle(
-                            text: "BMI",
-                            textStyle: const TextStyle(color: AppColors.text)),
-                        primaryXAxis: CategoryAxis(
-                          labelStyle: const TextStyle(color: AppColors.text),
-                        ),
-                        primaryYAxis: NumericAxis(
-                          plotBands: [
-                            PlotBand(
-                                borderWidth: 1,
-                                borderColor: AppColors.background,
-                                shouldRenderAboveSeries: false,
-                                start: idealBMI['min'] ?? 0.0,
-                                end: idealBMI['max'] ?? 0.0,
-                                color: AppColors.background,
-                                opacity: 0.3)
-                          ],
-                          labelStyle: const TextStyle(color: AppColors.text),
-                        ),
-                        series: <ChartSeries>[
-                          LineSeries<WeightChange, String>(
-                            color: AppColors.chartline,
-                            dataSource: weights,
-                            xValueMapper: (WeightChange weightdata, _) =>
-                                DateFormat('dd/MM/yyyy')
-                                    .format(weightdata.time!),
-                            yValueMapper: (WeightChange weightdata, _) =>
-                                weightdata.bmi,
-                            xAxisName: "Monat",
-                            yAxisName: "BMI",
-                          )
-                        ],
-                      ),
-                    )
-                ],
-              ),
+                  )
+              ],
             ),
-          )),
+          ),
+        ),
+        bottomNavigationBar: const MenuBottom(),
+      ),
     );
   }
 

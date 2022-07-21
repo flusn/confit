@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../models/profil_image.dart';
 import '../templates/menu.drawer.dart';
+import '../templates/menu_bottom.dart';
 import '../themes/colors.dart';
 import '../themes/textStyles.dart';
 import '../models/user_controller.dart';
@@ -110,6 +111,7 @@ class _ShopScreenState extends State<ShopScreen> {
           );
         },
       ),
+      bottomNavigationBar: const MenuBottom(),
     );
   }
 }
