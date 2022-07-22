@@ -50,6 +50,7 @@ class _BasedataScreenState extends State<BasedataScreen> {
   List<Trainingsset> listTrainingssets = [];
   int points = 0;
   double km = 0.0;
+  double bmi = 0.0;
 
   Future selectOrTakePhoto(ImageSource imageSource) async {
     final pickedFile = await picker.pickImage(source: imageSource);
@@ -120,6 +121,7 @@ class _BasedataScreenState extends State<BasedataScreen> {
     }
     points = c.user.value.points;
     km = c.user.value.km;
+    bmi = c.user.value.bmi;
     super.initState();
   }
 
@@ -412,6 +414,7 @@ class _BasedataScreenState extends State<BasedataScreen> {
                         c.user.value.calculateAge();
                         c.user.value.points = points;
                         c.user.value.km = km;
+                        c.user.value.bmi = bmi;
                         //beim ersten durchlauf wird das Gewicht in diesem Screen erfasst und in die Liste der Gewichte übertragen
                         if (userdatafistInput) {
                           c.user.value.weightChanges!.add(WeightChange(

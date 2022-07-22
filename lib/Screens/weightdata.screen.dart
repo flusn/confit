@@ -145,6 +145,15 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
                           if (_formKey.currentState != null) {
                             if (_formKey.currentState!.validate()) {
                               setState(() {
+                                // weights.add(WeightChange(
+                                //   time: DateTime.utc(2022, 5, 6),
+                                //   weight: 100.0,
+                                // ));
+                                // weights.add(WeightChange(
+                                //   time: DateTime.utc(2022, 6, 10),
+                                //   weight: 90.0,
+                                // ));
+
                                 weights.add(WeightChange(
                                   time: DateTime.now(),
                                   weight: double.parse(weightController.text),
@@ -153,7 +162,7 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
                                     .lastWhere((element) => element.bmi == null)
                                     .calculateBMI(c.user.value.height!);
                               });
-
+                              c.user.value.bmi = weights.last.bmi!;
                               c.user.value.weightChanges = weights;
                               final userAsNormalMap = c.user.value.toJson();
                               userstorage.write(
@@ -352,6 +361,17 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
                                     weights
                                         .elementAt(index)
                                         .calculateBMI(c.user.value.height!);
+
+                                    c.user.value.bmi = weights.last.bmi != null
+                                        ? weights.last.bmi!
+                                        : 0.0;
+                                    c.user.value.weightChanges = weights;
+                                    final userAsNormalMap =
+                                        c.user.value.toJson();
+                                    userstorage.write(
+                                        c.currentUserId.value.toString(),
+                                        userAsNormalMap);
+
                                     Navigator.of(context).pop();
                                     setState(() {
                                       ScaffoldMessenger.of(context)
@@ -367,6 +387,14 @@ class _WeightdataScreenState extends State<WeightdataScreen> {
                         ));
               } else if (direction == DismissDirection.endToStart) {
                 weights.removeAt(index);
+                c.user.value.bmi =
+                    weights.last.bmi != null ? weights.last.bmi! : 0.0;
+                c.user.value.weightChanges = weights;
+
+                final userAsNormalMap = c.user.value.toJson();
+                userstorage.write(
+                    c.currentUserId.value.toString(), userAsNormalMap);
+
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(
                         'Eintrag vom $formattedtimestamp wurde gelöscht')));

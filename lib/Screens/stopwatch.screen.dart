@@ -145,6 +145,91 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
                     c.user.value.trainingssets ??= [];
                     final minutes = _stopWatchTimer.minuteTime.value;
                     final seconds = _stopWatchTimer.secondTime.value;
+
+                    // c.user.value.trainingssets!.add(Trainingsset(
+                    //     time: DateTime.utc(2022, 5, 20),
+                    //     minutes: 36,
+                    //     seconds: 35,
+                    //     km: getkm(36),
+                    //     points: getPoints(seconds: 36 * 60 + 35)));
+
+                    // c.user.value.trainingssets!.add(Trainingsset(
+                    //     time: DateTime.utc(2022, 5, 25),
+                    //     minutes: 20,
+                    //     seconds: 11,
+                    //     km: getkm(20),
+                    //     points: getPoints(seconds: 20 * 60 + 11)));
+
+                    // c.user.value.trainingssets!.add(Trainingsset(
+                    //     time: DateTime.utc(2022, 6, 1),
+                    //     minutes: 50,
+                    //     seconds: 25,
+                    //     km: getkm(50),
+                    //     points: getPoints(seconds: 50 * 60 + 25)));
+
+                    // c.user.value.trainingssets!.add(Trainingsset(
+                    //     time: DateTime.utc(2022, 6, 7),
+                    //     minutes: 80,
+                    //     seconds: 1,
+                    //     km: getkm(80),
+                    //     points: getPoints(seconds: 80 * 60 + 1)));
+
+                    // c.user.value.trainingssets!.add(Trainingsset(
+                    //     time: DateTime.utc(2022, 6, 17),
+                    //     minutes: 30,
+                    //     seconds: 3,
+                    //     km: getkm(30),
+                    //     points: getPoints(seconds: 30 * 60 + 3)));
+
+                    // c.user.value.trainingssets!.add(Trainingsset(
+                    //     time: DateTime.utc(2022, 6, 20),
+                    //     minutes: 70,
+                    //     seconds: 6,
+                    //     km: getkm(70),
+                    //     points: getPoints(seconds: 70 * 60 + 6)));
+
+                    // c.user.value.trainingssets!.add(Trainingsset(
+                    //     time: DateTime.utc(2022, 7, 1),
+                    //     minutes: 50,
+                    //     seconds: 50,
+                    //     km: getkm(50),
+                    //     points: getPoints(seconds: 50 * 60 + 50)));
+
+                    // c.user.value.trainingssets!.add(Trainingsset(
+                    //     time: DateTime.utc(2022, 7, 5),
+                    //     minutes: 50,
+                    //     seconds: 50,
+                    //     km: getkm(50),
+                    //     points: getPoints(seconds: 50 * 60 + 50)));
+
+                    // c.user.value.trainingssets!.add(Trainingsset(
+                    //     time: DateTime.utc(2022, 7, 10),
+                    //     minutes: 50,
+                    //     seconds: 50,
+                    //     km: getkm(50),
+                    //     points: getPoints(seconds: 50 * 60 + 50)));
+
+                    // c.user.value.trainingssets!.add(Trainingsset(
+                    //     time: DateTime.utc(2022, 7, 15),
+                    //     minutes: 50,
+                    //     seconds: 10,
+                    //     km: getkm(50),
+                    //     points: getPoints(seconds: 50 * 60 + 10)));
+
+                    // c.user.value.trainingssets!.add(Trainingsset(
+                    //     time: DateTime.utc(2022, 7, 20),
+                    //     minutes: 35,
+                    //     seconds: 10,
+                    //     km: getkm(35),
+                    //     points: getPoints(seconds: 35 * 60 + 10)));
+
+                    // c.user.value.trainingssets!.add(Trainingsset(
+                    //     time: DateTime.utc(2022, 7, 21),
+                    //     minutes: 120,
+                    //     seconds: 10,
+                    //     km: getkm(120),
+                    //     points: getPoints(seconds: 120 * 60 + 10)));
+
                     c.user.value.trainingssets!.add(Trainingsset(
                         time: DateTime.now(),
                         minutes: minutes,
@@ -152,9 +237,10 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
                         km: getkm(minutes),
                         points: getPoints(seconds: minutes * 60 + seconds)));
 
-                    c.user.value.points =
-                        getPointsSum(c.user.value.trainingssets!);
-                    c.user.value.km = getkmSum(c.user.value.trainingssets!);
+                    c.user.value.points +=
+                        getPoints(seconds: minutes * 60 + seconds);
+                    c.user.value.km += getkm(minutes);
+                    //c.user.value.km = getkmSum(c.user.value.trainingssets!);
 
                     final userAsNormalMap = c.user.value.toJson();
                     userstorage.write(

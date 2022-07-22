@@ -7,6 +7,7 @@ import '../templates/menu.drawer.dart';
 import '../templates/menu_bottom.dart';
 import '../themes/colors.dart';
 import '../themes/textStyles.dart';
+import 'stopwatch.screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -121,8 +122,21 @@ class HomeStats extends StatelessWidget {
     required this.c,
   }) : super(key: key);
 
-  final Controller c;
+  double getkmSum(List<Trainingsset> trainingssets) {
+    double km = 0;
+    for (final trainingsset in trainingssets) {
+      if (trainingsset.km != null) {
+        km += trainingsset.km!.toInt();
+      }
+    }
+    return km;
+  }
 
+  initState() {
+    c.user.value.km = getkmSum(c.user.value.trainingssets!);
+  }
+
+  final Controller c;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -168,6 +182,17 @@ class HomeStats extends StatelessWidget {
                   ? DateFormat('dd.MM.yyyy')
                       .format(c.user.value.trainingssets!.last.time!)
                   : "-",
+              style: const TextStyle(
+                  color: AppColors.text, fontSize: AppFontSizes.textHome),
+            ),
+            const SizedBox(height: AppPaddings.homeStats),
+            const Text(
+              "Bmi:",
+              style: TextStyle(
+                  color: AppColors.text, fontSize: AppFontSizes.textHome),
+            ),
+            Text(
+              c.user.value.bmi != 0.0 ? c.user.value.bmi.toString() : "-",
               style: const TextStyle(
                   color: AppColors.text, fontSize: AppFontSizes.textHome),
             ),
